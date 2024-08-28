@@ -80,7 +80,7 @@ public class CheckManager {
 
 
             for (Player op : Bukkit.getOnlinePlayers()) {
-                if ( op.hasPermission("antibaritone.flag") ) op.spigot().sendMessage(tc);
+                if ( op.hasPermission("sentry.flag") ) op.spigot().sendMessage(tc);
             }
         }
     }

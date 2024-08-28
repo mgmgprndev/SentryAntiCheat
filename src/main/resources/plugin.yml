@@ -1,0 +1,4 @@
+name: Sentry
+version: '${project.version}'
+main: com.mogukun.sentry.Sentry
+author: mogukun

@@ -2,7 +2,7 @@ package com.mogukun.sentry.check;
 
 import net.minecraft.server.v1_8_R3.Packet;
 
-public class Check {
+public abstract class Check {
 
     public CheckInfo checkInfo;
 
@@ -13,5 +13,9 @@ public class Check {
     public CheckResult handle(Packet packet){
         return null;
     }
+    public CheckResult handle(MovementData data){
+        return null;
+    }
+
 
 }

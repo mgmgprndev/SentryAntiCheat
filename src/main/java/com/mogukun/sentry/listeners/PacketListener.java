@@ -5,8 +5,15 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.entity.Player;
 
 public final class PacketListener extends ChannelDuplexHandler {
+
+    public Player player;
+
+    public PacketListener(Player player) {
+        this.player = player;
+    }
 
     @Override
     public void write(final ChannelHandlerContext channelHandlerContext, final Object object, final ChannelPromise channelPromise) throws Exception {
@@ -14,13 +21,7 @@ public final class PacketListener extends ChannelDuplexHandler {
 
         try {
             final Packet<PacketListenerPlayOut> packet = (Packet<PacketListenerPlayOut>) object;
-
-            // Get the player who sent the packet
-            EntityPlayer player = getPlayer(channelHandlerContext);
-            if (player != null) {
-                Sentry.instance.checkManager.runCheck(player.getBukkitEntity(), packet);
-            }
-
+            Sentry.instance.checkManager.runCheck(player, packet);
         }
         catch (final Throwable throwable) {
             throwable.printStackTrace();
@@ -34,10 +35,7 @@ public final class PacketListener extends ChannelDuplexHandler {
         try {
             final Packet<PacketListenerPlayIn> packet = (Packet<PacketListenerPlayIn>) object;
 
-            EntityPlayer player = getPlayer(channelHandlerContext);
-            if (player != null) {
-                Sentry.instance.checkManager.runCheck(player.getBukkitEntity(), packet);
-            }
+            Sentry.instance.checkManager.runCheck(player, packet);
 
         }
         catch (final Throwable throwable) {
@@ -45,9 +43,6 @@ public final class PacketListener extends ChannelDuplexHandler {
         }
     }
 
-    private EntityPlayer getPlayer(ChannelHandlerContext ctx) {
-        return null; // fuck no idda.
-    }
 
 
 }

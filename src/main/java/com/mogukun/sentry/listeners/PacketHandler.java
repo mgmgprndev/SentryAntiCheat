@@ -7,11 +7,11 @@ import io.netty.channel.ChannelPromise;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.entity.Player;
 
-public final class PacketListener extends ChannelDuplexHandler {
+public final class PacketHandler extends ChannelDuplexHandler {
 
     public Player player;
 
-    public PacketListener(Player player) {
+    public PacketHandler(Player player) {
         this.player = player;
     }
 

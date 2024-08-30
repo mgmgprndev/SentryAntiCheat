@@ -11,23 +11,15 @@ public class FlyB extends Check {
 
     double buffer = 0;
 
-    double lastAccel = 0;
 
     @Override
-    public CheckResult handle(MovementData data)
+    public void handle(MovementData data)
     {
-
-
-        if ( data.clientAirTick > 2 && data.currentDeltaY <= data.lastDeltaY  ) {
-            if ( buffer++ > 2 ) {
-                return new CheckResult();
-            }
+        if ( data.clientAirTick > 12 && data.currentDeltaY <= data.lastDeltaY  ) {
+            if ( buffer++ > 2 ) flag();
         } else {
             buffer -= 1;
         }
-
-        return null;
-
     }
 
 }

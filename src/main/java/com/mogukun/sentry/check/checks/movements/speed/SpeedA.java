@@ -10,28 +10,27 @@ import org.bukkit.potion.PotionEffectType;
 )
 public class SpeedA extends Check {
 
-    double buffer = 0;
+    double balance = 0;
 
     @Override
-    public CheckResult handle(MovementData data)
+    public void handle(MovementData data)
     {
-
         PlayerDataUtil dataUtil = new PlayerDataUtil(data.player);
 
         double maxDeltaXZ = data.lastDeltaXZ * 1.8;
         maxDeltaXZ += dataUtil.getAmplifier(PotionEffectType.SPEED) * 0.1F;
 
         if ( data.currentDeltaXZ > maxDeltaXZ ) {
-            if ( buffer++ > 5 ) {
-                buffer = 0;
-                return new CheckResult(data.currentDeltaXZ + " > " + maxDeltaXZ);
+
+            balance += (int) data.currentDeltaXZ * 10;
+            balance -= 1;
+
+
+            if ( balance > 5 ) {
+                balance = 0;
+                flag(data.currentDeltaXZ + " > " + maxDeltaXZ);
             }
-        } else {
-            buffer -= buffer > 0 ? -0.1 : 0;
         }
-
-        return null;
-
     }
 
 }

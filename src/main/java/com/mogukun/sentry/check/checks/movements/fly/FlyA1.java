@@ -12,20 +12,14 @@ public class FlyA1 extends Check {
     double buffer = 0;
 
     @Override
-    public CheckResult handle(MovementData data)
+    public void handle(MovementData data)
     {
 
-
-        if ( data.clientAirTick > 2 && data.currentDeltaY > data.lastDeltaY ) {
-            if ( buffer++ > 2 ) {
-                return new CheckResult("buffer=" + buffer );
-            }
+        if ( data.clientAirTick > 12 && data.currentDeltaY > data.lastDeltaY ) {
+            if ( buffer++ > 2 ) flag("buffer=" + buffer );
         } else {
             buffer -= buffer > 0 ? 0.1 : 0;
         }
-
-        return null;
-
     }
 
 }

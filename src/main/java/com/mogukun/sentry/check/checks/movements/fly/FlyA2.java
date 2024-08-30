@@ -12,21 +12,15 @@ public class FlyA2 extends Check {
     double buffer = 0;
 
     @Override
-    public CheckResult handle(MovementData data)
+    public void handle(MovementData data)
     {
-
         double accel = data.currentDeltaY - data.lastDeltaY;
 
-        if ( data.clientAirTick > 2 && Math.abs(accel) < 0.01 ) {
-            if ( buffer++ > 2 ) {
-                return new CheckResult("accel=" + accel );
-            }
+        if ( data.clientAirTick > 12 && Math.abs(accel) < 0.01 ) {
+            if ( buffer++ > 2 ) flag("accel=" + accel );
         } else {
             buffer -= buffer > 0 ? 0.3 : 0;
         }
-
-        return null;
-
     }
 
 }

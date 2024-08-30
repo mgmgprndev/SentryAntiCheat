@@ -3,6 +3,7 @@ package com.mogukun.sentry.check;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -66,10 +67,10 @@ public class MovementData {
         lastDeltaPitch = lastMovementData.currentDeltaPitch;
 
 
-        clientAirTick = lastMovementData.clientAirTick++;
+        clientAirTick = lastMovementData.clientAirTick += 1;
         if ( clientGround ) clientAirTick = 0;
 
-        serverAirTick = lastMovementData.serverAirTick++;
+        serverAirTick = lastMovementData.serverAirTick += 1;
         if ( serverGround ) serverAirTick = 0;
     }
 
@@ -109,7 +110,7 @@ public class MovementData {
                     double distance = locBlock.distance(playerLocation);
 
 
-                    if (isColliding && block.getType() != Material.AIR && distance <= 1.8 ) {
+                    if (isColliding && block.getType() != Material.AIR && block.getType().isSolid() && distance <= 1.8 ) {
                         return true;
                     }
 

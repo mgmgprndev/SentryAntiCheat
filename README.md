@@ -2,8 +2,7 @@
 SentryAntiCheat is open-source  packet based anti-cheat solution for Minecraft 1.8.
 
 # Issues
-1. Async entity spawn issues - probably causing on packet listener
-2. checks are not running properly.
+1. Checks have falses, needs to be fixed
 
 # ToDo
 1. Customize Alert System - allows use many customized alerts! 

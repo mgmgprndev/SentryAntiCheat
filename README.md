@@ -1,5 +1,7 @@
 # SentryAntiCheat
-SentryAntiCheat is open-source  packet based anti-cheat solution for Minecraft 1.8.
+SentryAntiCheat is open-source  packet based anti-cheat solution for Minecraft 1.8. <br>
+Detects Fly, Speed, WaterWalk, NoFall, Timer etc... (:
+And Free........ HaHa!
 
 # Issues
 No Issues Currently Found

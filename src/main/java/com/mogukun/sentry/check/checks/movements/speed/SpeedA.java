@@ -15,6 +15,7 @@ public class SpeedA extends Check {
     @Override
     public void handle(MovementData data)
     {
+
         PlayerDataUtil dataUtil = new PlayerDataUtil(data.player);
 
         double maxDeltaXZ = data.lastDeltaXZ * 1.8;

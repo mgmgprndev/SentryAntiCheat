@@ -1,6 +1,7 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
+import com.mogukun.sentry.util.AlertUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -36,48 +37,11 @@ public abstract class Check implements Listener {
     }
 
     public void flag() {
-        flag("N/A");
+        flag("");
     }
 
     public void flag(String debug){
-        UUID uuid = player.getUniqueId();
-
-        Sentry.instance.checkManager.vl.add( new ViolationData( uuid, checkInfo.name() ));
-
-        int total = 0;
-        int perCheck = 0;
-
-        for( ViolationData violationData : Sentry.instance.checkManager.vl )
-        {
-            if ( !violationData.uuid.equals(uuid) ) continue;
-            if ( violationData.check.equals(checkInfo.name()) ) perCheck++;
-            total++;
-        }
-
-        String message = ChatColor.translateAlternateColorCodes('&',
-                "&8&l[&6&lSENTRY&8&l]&c " + player.getName() + "&7 failed&c " + checkInfo.name());
-
-        String information = "&8&l[&6&lSENTRY&8&l]&r\n";
-        information += "&fAbout This Check:&7 " + checkInfo.description() + "\n\n";
-        information += "&fDebug:&7 " + debug + "\n";
-        information += "&fVL\n";
-        information += "&f* This Check:&7 " + perCheck + "\n";
-        information += "&f* Total     :&7 " + total    + "\n\n";
-        information += "&6Click To Teleport";
-
-        TextComponent tc = new TextComponent(message);
-
-        tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(
-                ChatColor.translateAlternateColorCodes('&',
-                        information) ).create()));
-
-        tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                "/tp " + player.getName() ));
-
-
-        for (Player op : Bukkit.getOnlinePlayers()) {
-            if ( op.hasPermission("sentry.flag") ) op.spigot().sendMessage(tc);
-        }
+        new AlertUtil(player, checkInfo, debug);
     }
 
 

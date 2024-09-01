@@ -1,13 +1,13 @@
-package com.mogukun.sentry.check.checks.players.protocol;
+package com.mogukun.sentry.check.checks.players.groundspoof;
 
 import com.mogukun.sentry.check.*;
 
 @CheckInfo(
-        name = "Protocol (A)",
+        name = "GroundSpoof (A)",
         description = "Simple Ground Spoof Check",
         category = Category.PLAYER
 )
-public class ProtocolA extends Check {
+public class GroundSpoofA extends Check {
 
     int balance = 0;
     int buffer = 0;
@@ -21,6 +21,8 @@ public class ProtocolA extends Check {
             lastAirTick = data.serverAirTick;
             return;
         }
+
+        if ( data.sinceWaterTick < 20 ) return;
 
         int diff = Math.abs(data.clientAirTick - lastAirTick);
 

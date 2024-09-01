@@ -5,16 +5,11 @@ import com.mogukun.sentry.check.checks.movements.fly.FlyA1;
 import com.mogukun.sentry.check.checks.movements.fly.FlyA2;
 import com.mogukun.sentry.check.checks.movements.fly.FlyB;
 import com.mogukun.sentry.check.checks.movements.speed.SpeedA;
-import com.mogukun.sentry.check.checks.players.protocol.ProtocolA;
+import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
+import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofA;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -25,7 +20,7 @@ import java.util.UUID;
 public class CheckManager {
 
 
-    ArrayList<ViolationData> vl = new ArrayList<>();
+    public ArrayList<ViolationData> vl = new ArrayList<>();
 
     ArrayList<Check> checks = new ArrayList<>();
 
@@ -38,9 +33,11 @@ public class CheckManager {
 
         checks.add( new SpeedA() );
 
-        checks.add( new ProtocolA() );
+        checks.add( new GroundSpoofA() );
 
         checks.add( new TimerA() );
+
+        checks.add( new WaterWalkA() );
 
     }
 

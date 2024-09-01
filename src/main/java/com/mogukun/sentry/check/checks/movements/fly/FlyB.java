@@ -15,6 +15,9 @@ public class FlyB extends Check {
     @Override
     public void handle(MovementData data)
     {
+
+        if ( data.sinceWaterTick < 20 ) return;
+
         if ( data.clientAirTick > 12 && data.currentDeltaY <= data.lastDeltaY  ) {
             if ( buffer++ > 2 ) flag();
         } else {

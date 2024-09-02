@@ -12,8 +12,12 @@ No Issues Currently Found
 3. Configuration System - make it allows disable, enable or configure checks. (This is not easy btw....)
 4. Create Past Location Reach, KillAura Check(s) - planning. im really not good at this.
 5. Auto Punish System - let's ban player cuz they cheating!
-6. Web UI (it is so hard) - like /sentry webui, dont worry im actually web developer....
-7. `/sentry alt` command, allow to scan player's alt.
+
+# Command ToDo
+1. `/sentry webui` webui
+2. `/sentry alt <player>` command, allow to scan player's alt.
+3. `/sentry info <player>` lookup player IP, ISP, country
+4. `/sentry aurabot <player>` test aura
 
 # WebUI Idea Memo (no eta, no guarantee)
 It can turn on by running `/sentry webui`, it will generates URL for check some violation data from web.

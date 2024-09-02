@@ -7,6 +7,8 @@ import com.mogukun.sentry.check.checks.movements.fly.FlyB;
 import com.mogukun.sentry.check.checks.movements.speed.SpeedA;
 import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofA;
+import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofB;
+import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofC;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
@@ -25,20 +27,20 @@ public class CheckManager {
     ArrayList<Check> checks = new ArrayList<>();
 
     public CheckManager(){
-
-
         checks.add( new FlyA1() );
         checks.add( new FlyA2() );
         checks.add( new FlyB() );
 
         checks.add( new SpeedA() );
 
-        checks.add( new GroundSpoofA() );
-
-        checks.add( new TimerA() );
-
         checks.add( new WaterWalkA() );
 
+
+        checks.add( new GroundSpoofA() );
+        checks.add( new GroundSpoofB() );
+        checks.add( new GroundSpoofC() );
+
+        checks.add( new TimerA() );
     }
 
     public HashMap<UUID,ArrayList<Check>> checkMap = new HashMap<>();

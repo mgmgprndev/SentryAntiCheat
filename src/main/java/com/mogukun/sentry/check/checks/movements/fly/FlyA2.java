@@ -14,7 +14,6 @@ public class FlyA2 extends Check {
     @Override
     public void handle(MovementData data)
     {
-
         if ( data.sinceWaterTick < 20 ) return;
 
         double accel = data.currentDeltaY - data.lastDeltaY;

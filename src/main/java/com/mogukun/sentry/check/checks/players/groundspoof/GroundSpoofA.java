@@ -23,6 +23,10 @@ public class GroundSpoofA extends Check {
         }
 
         if ( data.sinceWaterTick < 20 ) return;
+        if ( data.clientAirTick < 20 || lastAirTick < 20 ) {
+            lastAirTick = data.serverAirTick;
+            return;
+        }
 
         int diff = Math.abs(data.clientAirTick - lastAirTick);
 

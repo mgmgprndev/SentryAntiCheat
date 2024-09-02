@@ -36,6 +36,9 @@ public class MovementData {
 
     public boolean moving = false, rotating = false;
 
+
+    public double lastGroundY = 0, serverFallDistance = 0;
+
     public MovementData() {}
 
     public MovementData(Player player,
@@ -133,6 +136,18 @@ public class MovementData {
 
         sinceWaterTick = lastMovementData.sinceWaterTick += 1;
         if ( isInLiquid ) sinceWaterTick = 0;
+
+        lastGroundY = lastMovementData.lastGroundY;
+        if ( serverGround ) {
+            lastGroundY = lastY;
+        }
+
+        serverFallDistance = lastMovementData.serverFallDistance;
+        if ( !serverGround && currentY < lastY ) {
+            serverFallDistance += currentDeltaY;
+        } else {
+            serverFallDistance = 0;
+        }
 
     }
 

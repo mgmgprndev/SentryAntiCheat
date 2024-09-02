@@ -10,6 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.concurrent.Executors;
@@ -29,6 +30,11 @@ public class PlayerListener implements Listener {
                         pipeline.addBefore("packet_handler", "sentry_packet_handler",
                                 new PacketHandler(event.getPlayer()))
         );
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        Sentry.instance.checkManager.checkMap.remove(event.getPlayer().getUniqueId());
     }
 
     @EventHandler

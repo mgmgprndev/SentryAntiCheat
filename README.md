@@ -4,7 +4,10 @@ Detects Fly, Speed, WaterWalk, NoFall, Timer etc... (:
 And Free........ HaHa!
 
 # Issues
-No Issues Currently Found
+1. Collision Check is badly coded, needs fix.
+2. Fly A2 false on ladder
+3. WallClimb(A) (NOT PUBLISHED YET) falses.
+and many others.....
 
 # ToDo (It will delay a lot)
 1. Customize Alert System - allows use many customized alerts!

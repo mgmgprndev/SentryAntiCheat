@@ -17,6 +17,7 @@ public class FlyA1 extends Check {
     {
         if ( data.sinceWaterTick < 20 ) return;
         if ( data.serverGround ) return;
+        if ( data.isInClimb  ) return;
 
         double diff1 = data.lastGroundY - data.serverFallDistance;
         double diff2 = Math.abs(data.currentY - diff1);

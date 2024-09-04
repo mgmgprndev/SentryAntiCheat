@@ -15,6 +15,7 @@ public class FlyA2 extends Check {
     public void handle(MovementData data)
     {
         if ( data.sinceWaterTick < 20 ) return;
+        if ( data.isInClimb  ) return;
 
         double accel = data.currentDeltaY - data.lastDeltaY;
 

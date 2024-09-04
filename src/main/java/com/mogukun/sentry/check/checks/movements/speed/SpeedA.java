@@ -16,6 +16,11 @@ public class SpeedA extends Check {
     public void handle(MovementData data)
     {
 
+//        if ( data.serverGround && !data.clientGround )  debug("ground yep");
+//        if ( data.isHittingHead ) debug("hitting head");
+//        if ( data.isInClimb ) debug("in climb");
+
+
         PlayerDataUtil dataUtil = new PlayerDataUtil(data.player);
 
         double maxDeltaXZ = data.lastDeltaXZ * 1.8;

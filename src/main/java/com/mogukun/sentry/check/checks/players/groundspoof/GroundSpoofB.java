@@ -18,9 +18,9 @@ public class GroundSpoofB extends Check {
     public void handle(MovementData data)
     {
         if ( data.serverGroundTick > 15 &&
-               data.serverAirTick > 15 ) {
+               data.clientAirTick > 15 ) {
             if (buffer++ > 5) {
-                flag("sgt=" + data.serverGroundTick + " sat=" + data.serverAirTick);
+                flag("sgt=" + data.serverGroundTick + " sat=" + data.clientAirTick);
                 buffer = 0;
             }
         } else {

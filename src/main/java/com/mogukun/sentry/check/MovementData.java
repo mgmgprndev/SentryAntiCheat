@@ -15,6 +15,8 @@ public class MovementData {
     public ArrayList<Block> colliding = new ArrayList<>();
     public ArrayList<Block> standing = new ArrayList<>();
 
+    public ArrayList<Block> hittingHead = new ArrayList<>();
+
     public Player player;
     public double lastX = 0, lastY = 0, lastZ = 0;
     public float lastYaw = 0, lastPitch = 0;
@@ -32,9 +34,11 @@ public class MovementData {
 
     public int sinceWaterTick = 0, waterTick = 0;
 
-    public boolean isInLiquid = false;
+    public boolean isInLiquid = false, isInClimb = false;
 
     public boolean moving = false, rotating = false;
+
+    public boolean isHittingHead = false, hasHorizontallyColliding = false;
 
 
     public double lastGroundY = 0, serverFallDistance = 0;
@@ -51,24 +55,46 @@ public class MovementData {
         Location playerLoc =  new Location(player.getWorld(),x,y,z);
         colliding = getCollidingBlock( playerLoc );
         standing = getAroundBlock( playerLoc );
+        hittingHead = getAboveBlock( new Location(player.getWorld(),x,y + 1 ,z) );
 
         clientGround = ground;
 
         serverGround = false; // because it should set false for now.
         for ( Block block : standing ) {
-            if ( block.getType() != Material.AIR && block.getType().isSolid() ) {
+            double by = block.getY();
+            double pby = playerLoc.getBlockY();
+            double py = playerLoc.getY();
+
+
+            boolean onBlock = by == pby - 1
+                    || ( by == pby && (py % (1/64D) < 1E-4)  ) ;
+
+
+            if ( block.getType() != Material.AIR && block.getType().isSolid() && onBlock ) {
                 serverGround = true;
             }
-            if (block.getType().toString().contains("ICE")) {
+            if (block.getType().toString().contains("ICE") && onBlock) {
                 isOnIce = true;
             }
-            if (block.getType().toString().contains("SLIME")) {
+            if (block.getType().toString().contains("SLIME") && onBlock) {
                 isOnSlime = true;
             }
         }
 
+        for ( Block block : hittingHead ) {
+            if ( block.getType() != Material.AIR && block.getType().isSolid()
+                    && block.getY() == playerLoc.getBlockY() + 2  ) isHittingHead = true;
+        }
+
         for ( Block block : colliding ) {
             if (block.isLiquid()) isInLiquid = true;
+            if( block.getY() == playerLoc.getBlockY() ||
+                    block.getY() == playerLoc.getBlockY() + 1) {
+                if ( block.getType() != Material.AIR && block.getType().isSolid() ) hasHorizontallyColliding = true;
+            }
+            if(block.getType() == Material.LADDER || block.getType() == Material.VINE) {
+                if(hasHorizontallyColliding) isInClimb = true;
+            }
         }
 
 
@@ -176,6 +202,29 @@ public class MovementData {
         return collidingBlocks;
     }
 
+    private ArrayList<Block> getAboveBlock(Location playerLocation) {
+
+        ArrayList<Block> collidingBlocks = new ArrayList<>();
+
+        for (int xOffset = -1; xOffset <= 1; xOffset++) {
+            for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                for (int yOffset = -1; yOffset <= 1; yOffset++) { // Changed yOffset range to include negative values
+
+                    Block block = player.getWorld().getBlockAt(
+                            playerLocation.getBlockX() + xOffset,
+                            playerLocation.getBlockY() + yOffset, // Note the change to use yOffset directly
+                            playerLocation.getBlockZ() + zOffset
+                    );
+
+                    if (isColliding(playerLocation, block)) collidingBlocks.add(block);
+                }
+            }
+        }
+
+        return collidingBlocks;
+    }
+
+
 
     private ArrayList<Block> getAroundBlock(Location playerLocation) {
 
@@ -219,7 +268,7 @@ public class MovementData {
                 feetY >= blockMinY && feetY <= blockMaxY;
 
         Location locBlock = block.getLocation();
-        locBlock = locBlock.clone().add(0.5, 0.0, 0.5);
+        locBlock = locBlock.clone().add(0.5, 0.5, 0.5);
         Location locPlayer = playerLocation.clone();
         locPlayer.setY(locBlock.getY());
         double distance = Math.sqrt(
@@ -227,7 +276,9 @@ public class MovementData {
                         Math.pow(locBlock.getZ() - locPlayer.getZ(), 2)
         );
 
-        return isColliding && distance <= 1.25;
+        // if ( isColliding && block.getType().isSolid() ) player.sendMessage("distance=" + distance);
+
+        return isColliding && distance <= 1.14;
     }
 
 }

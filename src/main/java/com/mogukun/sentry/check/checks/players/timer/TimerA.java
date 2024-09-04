@@ -48,7 +48,6 @@ public class TimerA extends Check {
     public void event(Event event) {
         if ( event instanceof PlayerTeleportEvent ) {
             balance -= 50;
-            startIgnore = System.currentTimeMillis();
         }
         if ( event instanceof PlayerJoinEvent) {
             startIgnore = System.currentTimeMillis();

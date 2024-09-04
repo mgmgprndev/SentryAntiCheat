@@ -5,11 +5,13 @@ import com.mogukun.sentry.check.checks.movements.fly.FlyA1;
 import com.mogukun.sentry.check.checks.movements.fly.FlyA2;
 import com.mogukun.sentry.check.checks.movements.fly.FlyB;
 import com.mogukun.sentry.check.checks.movements.speed.SpeedA;
+import com.mogukun.sentry.check.checks.movements.wallclimb.WallClimbA;
 import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofA;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofB;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofC;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
+import com.mogukun.sentry.check.checks.players.timer.TimerB;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import org.bukkit.entity.Player;
@@ -34,13 +36,14 @@ public class CheckManager {
         checks.add( new SpeedA() );
 
         checks.add( new WaterWalkA() );
-
+        checks.add( new WallClimbA() );
 
         checks.add( new GroundSpoofA() );
         checks.add( new GroundSpoofB() );
         checks.add( new GroundSpoofC() );
 
         checks.add( new TimerA() );
+        checks.add( new TimerB() );
     }
 
     public HashMap<UUID,ArrayList<Check>> checkMap = new HashMap<>();

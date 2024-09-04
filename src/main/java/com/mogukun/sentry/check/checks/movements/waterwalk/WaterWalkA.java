@@ -17,6 +17,7 @@ public class WaterWalkA extends Check {
     public void handle(MovementData data)
     {
         if (!data.isInLiquid) return;
+        if (data.isHittingHead) return;
         if (data.serverGround) return;
 
         if ( data.currentDeltaY == data.lastDeltaY ) {

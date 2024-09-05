@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -38,8 +39,15 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onEvent(PlayerTeleportEvent event){
+    public void onTeleport(PlayerTeleportEvent event){
         call(event.getPlayer(), event);
+    }
+
+    @EventHandler
+    public void onAttack(EntityDamageByEntityEvent event){
+        if(event.getDamager() instanceof Player) {
+            call(((Player) event.getDamager()), event);
+        }
     }
 
 

@@ -18,7 +18,7 @@ import java.util.UUID;
 public abstract class Check implements Listener {
 
     public CheckInfo checkInfo;
-    Player player;
+    public Player player;
 
     public Check(){
         checkInfo = this.getClass().getAnnotation(CheckInfo.class);

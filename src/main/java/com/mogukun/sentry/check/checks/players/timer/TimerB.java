@@ -4,11 +4,13 @@ import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
 import com.mogukun.sentry.check.MovementData;
+import com.mogukun.sentry.models.DeltaSample;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 @CheckInfo(
         name = "Timer (B)",
@@ -17,16 +19,7 @@ import java.util.ArrayList;
 )
 public class TimerB extends Check {
 
-    class DeltaSample {
-        long timeStamp;
-        double d;
-        public DeltaSample(double d) {
-            this.d = d;
-            timeStamp = System.currentTimeMillis();
-        }
-    }
-
-    ArrayList<DeltaSample> samples = new ArrayList<>();
+    ConcurrentLinkedDeque<DeltaSample> samples = new ConcurrentLinkedDeque<>();
     long lastPacket = 0;
     long startIgnore = 0;
 

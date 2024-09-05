@@ -1,6 +1,8 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
+import com.mogukun.sentry.check.checks.combats.autoclicker.AutoClickerA;
+import com.mogukun.sentry.check.checks.combats.reach.ReachA;
 import com.mogukun.sentry.check.checks.movements.fly.FlyA1;
 import com.mogukun.sentry.check.checks.movements.fly.FlyA2;
 import com.mogukun.sentry.check.checks.movements.fly.FlyB;
@@ -30,6 +32,10 @@ public class CheckManager {
     ArrayList<Check> checks = new ArrayList<>();
 
     public CheckManager(){
+
+        checks.add( new AutoClickerA() );
+        checks.add( new ReachA() );
+
         checks.add( new FlyA1() );
         checks.add( new FlyA2() );
         checks.add( new FlyB() );

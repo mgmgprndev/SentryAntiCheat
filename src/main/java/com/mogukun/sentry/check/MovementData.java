@@ -34,6 +34,8 @@ public class MovementData {
 
     public int sinceWaterTick = 0, waterTick = 0;
 
+    public int sinceClimbTick = 0, climbTick = 0;
+
     public boolean isInLiquid = false, isInClimb = false;
 
     public boolean moving = false, rotating = false;
@@ -88,12 +90,14 @@ public class MovementData {
 
         for ( Block block : colliding ) {
             if (block.isLiquid()) isInLiquid = true;
-            if( block.getY() == playerLoc.getBlockY() ||
-                    block.getY() == playerLoc.getBlockY() + 1) {
+            boolean isOnSameHeight = block.getY() == playerLoc.getBlockY() ||
+                    block.getY() == playerLoc.getBlockY() + 1;
+            if( isOnSameHeight ) {
                 if ( block.getType() != Material.AIR && block.getType().isSolid() ) hasHorizontallyColliding = true;
             }
-            if(block.getType() == Material.LADDER || block.getType() == Material.VINE) {
-                if(hasHorizontallyColliding) isInClimb = true;
+
+            if( block.getType() == Material.LADDER || block.getType() == Material.VINE ) {
+                isInClimb = true;
             }
         }
 
@@ -131,42 +135,53 @@ public class MovementData {
         lastDeltaPitch = lastMovementData.currentDeltaPitch;
 
 
-        clientAirTick = lastMovementData.clientAirTick += 1;
+        clientAirTick = lastMovementData.clientAirTick + 1;
         if ( clientGround ) clientAirTick = 0;
 
-        serverAirTick = lastMovementData.serverAirTick += 1;
+        serverAirTick = lastMovementData.serverAirTick + 1;
         if ( serverGround ) serverAirTick = 0;
 
 
-        clientGroundTick = lastMovementData.clientGroundTick += 1;
+        clientGroundTick = lastMovementData.clientGroundTick + 1;
         if ( !clientGround ) clientGroundTick = 0;
 
-        serverGroundTick = lastMovementData.serverGroundTick += 1;
+        serverGroundTick = lastMovementData.serverGroundTick + 1;
         if ( !serverGround ) serverGroundTick = 0;
 
 
-        sinceIceTick = lastMovementData.sinceIceTick += 1;
+        sinceIceTick = lastMovementData.sinceIceTick + 1;
         if ( isOnIce ) sinceIceTick = 0;
 
-        sinceSlimeTick = lastMovementData.sinceSlimeTick += 1;
+        sinceSlimeTick = lastMovementData.sinceSlimeTick + 1;
         if ( isOnSlime ) sinceSlimeTick = 0;
 
-        iceTick = lastMovementData.iceTick += 1;
+        iceTick = lastMovementData.iceTick + 1;
         if ( !isOnIce ) iceTick = 0;
 
-        slimeTick = lastMovementData.slimeTick += 1;
+        slimeTick = lastMovementData.slimeTick + 1;
         if ( !isOnSlime ) slimeTick = 0;
 
-        waterTick = lastMovementData.waterTick += 1;
+        waterTick = lastMovementData.waterTick + 1;
         if ( !isInLiquid ) waterTick = 0;
 
-        sinceWaterTick = lastMovementData.sinceWaterTick += 1;
+        sinceWaterTick = lastMovementData.sinceWaterTick + 1;
         if ( isInLiquid ) sinceWaterTick = 0;
 
         lastGroundY = lastMovementData.lastGroundY;
         if ( serverGround ) {
             lastGroundY = lastY;
         }
+
+        climbTick = lastMovementData.climbTick + 1;
+        if ( !isInClimb ) {
+            climbTick = 0;
+        }
+
+        sinceClimbTick = lastMovementData.sinceClimbTick + 1;
+        if ( isInClimb ) {
+            sinceClimbTick = 0;
+        }
+
 
         serverFallDistance = lastMovementData.serverFallDistance;
         if ( !serverGround && currentY < lastY ) {

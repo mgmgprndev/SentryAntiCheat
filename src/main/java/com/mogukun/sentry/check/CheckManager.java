@@ -4,6 +4,7 @@ import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.checks.movements.fly.FlyA1;
 import com.mogukun.sentry.check.checks.movements.fly.FlyA2;
 import com.mogukun.sentry.check.checks.movements.fly.FlyB;
+import com.mogukun.sentry.check.checks.movements.motion.MotionA;
 import com.mogukun.sentry.check.checks.movements.speed.SpeedA;
 import com.mogukun.sentry.check.checks.movements.wallclimb.WallClimbA;
 import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
@@ -34,6 +35,8 @@ public class CheckManager {
         checks.add( new FlyB() );
 
         checks.add( new SpeedA() );
+
+        checks.add( new MotionA() );
 
         checks.add( new WaterWalkA() );
         checks.add( new WallClimbA() );

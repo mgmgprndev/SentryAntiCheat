@@ -33,7 +33,7 @@ public class AlertUtil {
         }
 
         String message = ChatColor.translateAlternateColorCodes('&',
-                "&8&l[&6&lSENTRY&8&l]&c " + player.getName() + "&7 failed&c " + checkInfo.name());
+                "&8&l[&6&lSENTRY&8&l]&c " + player.getName() + "&7 failed&c " + checkInfo.name() + (checkInfo.experimental() ? " (EXP)" : "" ) );
 
         String information = "&8&l[&6&lSENTRY&8&l]&r\n";
         information += "&fAbout This Check:&7 " + checkInfo.description() + "\n\n";

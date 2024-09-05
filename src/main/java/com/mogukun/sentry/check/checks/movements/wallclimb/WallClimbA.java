@@ -16,7 +16,8 @@ public class WallClimbA extends Check {
     public void handle(MovementData data)
     {
         if (data.sinceWaterTick < 20) return;
-        if (data.isInClimb) return;
+        if ( !data.hasHorizontallyColliding ) return;
+        if ( data.sinceClimbTick < 15 ) return;
 
         if ( data.currentY > data.lastY ||
                 ( data.currentDeltaY == data.lastDeltaY && data.currentDeltaY != 0.0 )  ) {

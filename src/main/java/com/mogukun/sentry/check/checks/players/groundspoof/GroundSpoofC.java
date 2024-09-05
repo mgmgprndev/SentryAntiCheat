@@ -17,6 +17,7 @@ public class GroundSpoofC extends Check {
     @Override
     public void handle(MovementData data)
     {
+
         if ( data.serverAirTick > 15 &&
                data.clientGroundTick > 15 ) {
             if (buffer++ > 5) {

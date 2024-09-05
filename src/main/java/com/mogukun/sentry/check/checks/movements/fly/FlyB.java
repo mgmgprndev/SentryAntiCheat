@@ -17,7 +17,7 @@ public class FlyB extends Check {
     {
 
         if ( data.sinceWaterTick < 20 ) return;
-        if ( data.isInClimb  ) return;
+        if ( data.sinceClimbTick < 10  ) return;
 
         if ( data.clientAirTick > 12 && data.currentDeltaY <= data.lastDeltaY  ) {
             if ( buffer++ > 2 ) flag();

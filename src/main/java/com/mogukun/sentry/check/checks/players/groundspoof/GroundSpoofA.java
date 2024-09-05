@@ -17,6 +17,9 @@ public class GroundSpoofA extends Check {
     @Override
     public void handle(MovementData data)
     {
+
+        if ( data.sinceClimbTick < 15 ) return;
+
         if ( lastAirTick == 0 ) {
             lastAirTick = data.serverAirTick;
             return;

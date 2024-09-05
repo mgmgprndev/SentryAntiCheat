@@ -30,7 +30,7 @@ public class TimerB extends Check {
     long lastPacket = 0;
     long startIgnore = 0;
 
-    int buffer = 0;
+    double balance = 0;
 
     @Override
     public void handle(MovementData data) {
@@ -72,13 +72,17 @@ public class TimerB extends Check {
         }
         double average = sum / samples.size();
 
-        if ( possibility > 50 && (int) average != 50 ) {
-            if ( buffer++ > 5 ) {
-                flag( "average=" + average +  " possibility=" + possibility + " amountSample=" + samples.size() );
-                buffer = 0;
+        double x = possibility / samples.size();
+
+        if ( possibility > 50 && x > 1  && (int) average != 50 ) {
+            balance += possibility;
+            balance -= 50;
+
+            if ( balance > 20 ) {
+                flag( "average=" + average +  " possibility=" + possibility + " balance=" + balance + " x=" + x );
+                balance = 0;
             }
-        } else {
-            buffer -= buffer > 0 ? 1 : 0;
+
         }
 
         //debug( "average=" + average +  " possibility=" + possibility + " amountSample=" + samples.size() );

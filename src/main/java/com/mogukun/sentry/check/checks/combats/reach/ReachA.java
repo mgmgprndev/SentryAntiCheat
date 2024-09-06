@@ -55,7 +55,7 @@ public class ReachA extends Check {
         if ( event instanceof EntityDamageByEntityEvent) {
             long now = System.currentTimeMillis();
             UUID uid = ((EntityDamageByEntityEvent) event).getEntity().getUniqueId();
-            double minimumDistance = 10;
+            double minimumDistance = Double.MAX_VALUE;
 
             Location loc = player.getLocation().clone();
 
@@ -69,7 +69,7 @@ public class ReachA extends Check {
                 }
             }
 
-            if ( minimumDistance == 10 ) return; // not changed cuz.
+            if ( minimumDistance == Double.MAX_VALUE ) return;
 
             if ( minimumDistance > 3.5 ) {
                 flag("distance=" + minimumDistance);

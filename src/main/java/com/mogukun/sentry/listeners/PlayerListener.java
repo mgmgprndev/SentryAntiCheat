@@ -10,6 +10,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -48,6 +51,16 @@ public class PlayerListener implements Listener {
         if(event.getDamager() instanceof Player) {
             call(((Player) event.getDamager()), event);
         }
+    }
+
+    @EventHandler
+    public void onClick(PlayerInteractEvent event){
+        call(event.getPlayer(), event);
+    }
+
+    @EventHandler
+    public void onClickInv(InventoryClickEvent event) {
+        call((Player) event.getWhoClicked(), event);
     }
 
 

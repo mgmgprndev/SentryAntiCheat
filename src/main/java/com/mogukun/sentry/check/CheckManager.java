@@ -23,6 +23,8 @@ import com.mogukun.sentry.check.checks.players.timer.TimerA;
 import com.mogukun.sentry.check.checks.players.timer.TimerB;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
+import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
+import net.minecraft.server.v1_8_R3.PacketPlayOutKeepAlive;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -88,6 +90,17 @@ public class CheckManager {
     }
 
     public void runCheck(Player player, Packet packet) {
+
+        if ( packet instanceof PacketPlayOutKeepAlive ) {
+            Sentry.instance.dataManager.getPlayerData(player).lastOutKeepAlive = System.currentTimeMillis();
+        }
+
+        if ( packet instanceof PacketPlayInKeepAlive ) {
+            Sentry.instance.dataManager.getPlayerData(player).lastInKeepAlive = System.currentTimeMillis();
+            Sentry.instance.dataManager.getPlayerData(player).ping =
+                    Sentry.instance.dataManager.getPlayerData(player).lastInKeepAlive - Sentry.instance.dataManager.getPlayerData(player).lastOutKeepAlive;
+
+        }
 
         MovementData data = null;
 

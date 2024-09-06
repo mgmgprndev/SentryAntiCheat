@@ -6,4 +6,8 @@ public class PlayerData {
 
     public MovementData data = null;
 
+    public long lastOutKeepAlive;
+    public long lastInKeepAlive;
+    public long ping;
+
 }

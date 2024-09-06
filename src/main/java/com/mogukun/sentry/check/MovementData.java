@@ -1,5 +1,6 @@
 package com.mogukun.sentry.check;
 
+import com.mogukun.sentry.Sentry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -57,6 +58,9 @@ public class MovementData {
 
     public double lastGroundY = 0, serverFallDistance = 0;
 
+
+    public long ping = 0;
+
     public MovementData() {}
 
     public MovementData(Player player,
@@ -65,6 +69,7 @@ public class MovementData {
                         MovementData lastMovementData) {
 
         this.player = player;
+        this.ping = Sentry.instance.dataManager.getPlayerData(player).ping;
 
         Location playerLoc =  new Location(player.getWorld(),x,y,z);
 

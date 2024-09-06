@@ -22,6 +22,7 @@ public final class PacketHandler extends ChannelDuplexHandler {
         try {
             final Packet<PacketListenerPlayOut> packet = (Packet<PacketListenerPlayOut>) object;
             Sentry.instance.checkManager.runCheck(player, packet);
+
         }
         catch (final Throwable throwable) {
             throwable.printStackTrace();

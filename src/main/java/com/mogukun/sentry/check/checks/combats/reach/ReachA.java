@@ -1,5 +1,6 @@
 package com.mogukun.sentry.check.checks.combats.reach;
 
+import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
@@ -24,10 +25,14 @@ public class ReachA extends Check {
 
     ConcurrentLinkedDeque<LocationTimeStamp> locationTimeStamps = new ConcurrentLinkedDeque<>();
 
+    long ping = 0;
+
     @Override
     public void handle(MovementData data)
     {
         Location playerLocation = player.getLocation().clone();
+        ping = data.ping;
+
 
         for ( Entity ent : player.getWorld().getEntities() ) {
             Location  entLocation = ent.getLocation().clone();
@@ -52,7 +57,7 @@ public class ReachA extends Check {
             for ( LocationTimeStamp lts : locationTimeStamps ) {
                 if ( lts.uuid != uid  ) continue;
 
-                long diff = now - lts.timestamp;
+                long diff = now - ping - lts.timestamp;
                 if ( diff < 250 ) {
                     double dist = loc.distance(lts.loc);
                     if ( minimumDistance > dist ) minimumDistance = dist;

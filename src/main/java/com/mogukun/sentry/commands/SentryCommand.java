@@ -1,6 +1,7 @@
 package com.mogukun.sentry.commands;
 
 import com.mogukun.sentry.Sentry;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,21 +30,22 @@ public class SentryCommand implements CommandExecutor {
             if ( args.length == 0 )
             {
 
-                String temp = "&6&l&m==================================================\n"
-                        + "\n"
+                String temp = "&6&m----------------------------------------------------\n\n"
+                        + "\n\n"
                         + "&6&l SentryAntiCheat " + Sentry.instance.getDescription().getVersion() + "\n"
-                        + "\n"
+                        + "\n\n"
                         + "&6/sentry - show information\n"
                         + "&6/sentry alerts - enable alert\n"
-                        + "\n"
-                        + "&6&l&m==================================================";
+                        + "&6/sentry info <player> - get many information from database. \n"
+                        + "\n\n"
+                        + "&6&m----------------------------------------------------";
 
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', temp));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', temp.replace("\n","<BR>").replace("<BR>","\n")));
 
             }
             else if ( args.length == 1 )
             {
-                if ( args[0].equalsIgnoreCase("alerts") )
+                if ( args[0].toLowerCase().startsWith("alert") )
                 {
                     UUID uuid = player.getUniqueId();
                     Sentry.instance.alertStatus.putIfAbsent(uuid,0);
@@ -57,11 +59,25 @@ public class SentryCommand implements CommandExecutor {
                     }
 
                 }
+                else if ( args[0].equalsIgnoreCase("info") ) {
+                    player.sendMessage(chatColor("&c/sentry info <player>"));
+                }
             }
+            else if ( args.length == 2 )
+            {
+                Player target = Bukkit.getPlayer(args[1]);
+                if ( target == null ) {
+                    player.sendMessage(chatColor("&aOffline Player cannot lookup!"));
+                }
+                else
+                {
 
+                    // something do here
 
-
-
+                }
+            }
+        } else {
+            sender.sendMessage("§cThis command only executable from in-game.");
         }
 
 

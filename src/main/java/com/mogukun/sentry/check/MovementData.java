@@ -91,10 +91,12 @@ public class MovementData {
 
 
             boolean onBlock = by == pby - 1
-                    || ( by == pby && (py % (1/64D) < 1E-4)  ) ;
+                    || ( by == pby && (py % (1D /64D) < 1E-4)  );
 
+            if ( block.getType() != Material.AIR &&
+                    ( block.getType().isSolid() || (block.getType().isBlock() && !block.isLiquid()) ) &&
+                    onBlock ) {
 
-            if ( block.getType() != Material.AIR && block.getType().isSolid() && onBlock ) {
                 serverGround = true;
             }
             if (block.getType().toString().contains("ICE") && onBlock) {
@@ -254,11 +256,10 @@ public class MovementData {
 
     public ArrayList<Entity> getCollidingEntities(Location playerLocation) {
         ArrayList<Entity> temp = new ArrayList<>();
-        for ( Entity e : playerLocation.getWorld().getEntities() ) {
+        for ( Entity e : new ArrayList<>(playerLocation.getWorld().getEntities()) ) {
             Location el = e.getLocation().clone();
             double dist = el.distance(playerLocation);
             if ( dist < 1.6 && e.getUniqueId() != player.getUniqueId() ) {
-                //Bukkit.broadcastMessage(e.getType() + "=" + dist);
                 temp.add(e);
             }
         }
@@ -341,7 +342,7 @@ public class MovementData {
 
         Vector playerPos = playerLocation.toVector();
 
-        double checkY = 0.5;
+        double checkY = 0.5 + ( block.getType().toString().contains("FENCE") ? 0.5 : 0 );
 
         double feetY = playerPos.getY() - checkY;
 
@@ -365,8 +366,6 @@ public class MovementData {
                 Math.pow(locBlock.getX() - locPlayer.getX(), 2) +
                         Math.pow(locBlock.getZ() - locPlayer.getZ(), 2)
         );
-
-        // if ( isColliding && block.getType().isSolid() ) player.sendMessage("distance=" + distance);
 
         return isColliding && distance <= 1.14;
     }

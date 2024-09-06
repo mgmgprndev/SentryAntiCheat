@@ -20,14 +20,6 @@ public class AuraA extends Check {
 
 
     ArrayList<EntityHitData> hits = new ArrayList<>();
-    int buffer = 0;
-
-
-    @Override
-    public void handle(Packet packet)
-    {
-        // maybe not use?
-    }
 
     @Override
     public void event(Event event){

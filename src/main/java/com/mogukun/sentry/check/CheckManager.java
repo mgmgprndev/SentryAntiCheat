@@ -8,6 +8,7 @@ import com.mogukun.sentry.check.checks.movements.fly.FlyA1;
 import com.mogukun.sentry.check.checks.movements.fly.FlyA2;
 import com.mogukun.sentry.check.checks.movements.fly.FlyB;
 import com.mogukun.sentry.check.checks.movements.motion.MotionA;
+import com.mogukun.sentry.check.checks.movements.fly.FlyC;
 import com.mogukun.sentry.check.checks.movements.speed.SpeedA;
 import com.mogukun.sentry.check.checks.movements.wallclimb.WallClimbA;
 import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
@@ -20,7 +21,6 @@ import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofC;
 import com.mogukun.sentry.check.checks.players.inventory.InventoryA;
 import com.mogukun.sentry.check.checks.players.noslow.NoSlowA;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
-import com.mogukun.sentry.check.checks.players.timer.TimerB;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
@@ -52,6 +52,7 @@ public class CheckManager {
         checks.add( new SpeedA() );
 
         checks.add( new MotionA() );
+        checks.add( new FlyC() );
 
         checks.add( new WaterWalkA() );
         checks.add( new WallClimbA() );

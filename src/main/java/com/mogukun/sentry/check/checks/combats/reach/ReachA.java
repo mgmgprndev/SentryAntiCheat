@@ -33,8 +33,7 @@ public class ReachA extends Check {
         Location playerLocation = player.getLocation().clone();
         ping = data.ping;
 
-
-        for ( Entity ent : player.getWorld().getEntities() ) {
+        for ( Entity ent : new ArrayList<>(player.getWorld().getEntities()) ) {
             Location  entLocation = ent.getLocation().clone();
             double dist = entLocation.distance(playerLocation);
             if ( dist < 10 ) {

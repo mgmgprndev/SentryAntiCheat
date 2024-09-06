@@ -18,6 +18,8 @@ public class InventoryA extends Check {
     int sinceClick = 0;
     int ignore = 9999;
 
+    boolean failed = false;
+
     @Override
     public void handle(MovementData data) {
         if ( !data.moving ) return;
@@ -25,10 +27,21 @@ public class InventoryA extends Check {
             return;
         }
         if ( sinceClick++ < 1 ) {
+
+            if ( failed ) {
+
+                if ( data.moving ) {
+                    flag();
+                }
+
+                failed = false;
+            }
+
             if ( buffer++ > 0 ) {
-                flag("sinceClick=" + sinceClick);
+                failed = true;
                 buffer = 0;
             }
+
         } else {
             buffer -= buffer > 0 ? 1 : 0;
         }

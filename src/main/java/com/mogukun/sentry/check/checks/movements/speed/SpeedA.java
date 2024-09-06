@@ -15,11 +15,7 @@ public class SpeedA extends Check {
     @Override
     public void handle(MovementData data)
     {
-
-//        if ( data.serverGround && !data.clientGround )  debug("ground yep");
-//        if ( data.isHittingHead ) debug("hitting head");
-//        if ( data.isInClimb ) debug("in climb");
-
+        if ( data.sinceVehicleTick <= 5 ) return;
 
         PlayerDataUtil dataUtil = new PlayerDataUtil(data.player);
 

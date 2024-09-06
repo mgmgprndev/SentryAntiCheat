@@ -5,6 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -16,6 +18,8 @@ public class MovementData {
     public ArrayList<Block> standing = new ArrayList<>();
 
     public ArrayList<Block> hittingHead = new ArrayList<>();
+
+    public ArrayList<Entity> collidingEntity = new ArrayList<>();
 
     public Player player;
     public double lastX = 0, lastY = 0, lastZ = 0;
@@ -38,9 +42,17 @@ public class MovementData {
 
     public boolean isInLiquid = false, isInClimb = false;
 
+    public boolean isInWeb = false;
+    public int webTick = 0, sinceWebTick = 0;
+
     public boolean moving = false, rotating = false;
 
     public boolean isHittingHead = false, hasHorizontallyColliding = false;
+
+    public boolean isOnBoat = false;
+
+    public int standingOnBoatTick = 0, sinceStandingOnBoatTick = 0;
+    public int vehicleTick = 0, sinceVehicleTick = 0;
 
 
     public double lastGroundY = 0, serverFallDistance = 0;
@@ -55,9 +67,14 @@ public class MovementData {
         this.player = player;
 
         Location playerLoc =  new Location(player.getWorld(),x,y,z);
+
         colliding = getCollidingBlock( playerLoc );
+
         standing = getAroundBlock( playerLoc );
         hittingHead = getAboveBlock( new Location(player.getWorld(),x,y + 1 ,z) );
+
+        collidingEntity = getCollidingEntities(playerLoc);
+
 
         clientGround = ground;
 
@@ -84,8 +101,7 @@ public class MovementData {
         }
 
         for ( Block block : hittingHead ) {
-            if ( block.getType() != Material.AIR && block.getType().isSolid()
-                    && block.getY() == playerLoc.getBlockY() + 2  ) isHittingHead = true;
+            if ( block.getType() != Material.AIR && block.getType().isSolid() ) isHittingHead = true;
         }
 
         for ( Block block : colliding ) {
@@ -99,6 +115,14 @@ public class MovementData {
             if( block.getType() == Material.LADDER || block.getType() == Material.VINE ) {
                 isInClimb = true;
             }
+
+            if ( block.getType() == Material.WEB ) {
+                isInWeb = true;
+            }
+        }
+
+        for ( Entity e : collidingEntity ) {
+            if ( e.getType() == EntityType.BOAT ) isOnBoat = true;
         }
 
 
@@ -183,6 +207,37 @@ public class MovementData {
         }
 
 
+        webTick = lastMovementData.webTick + 1;
+        if ( !isInWeb ) {
+            webTick = 0;
+        }
+
+        sinceWebTick = lastMovementData.sinceWebTick + 1;
+        if ( isInWeb ) {
+            sinceWebTick = 0;
+        }
+
+        standingOnBoatTick = lastMovementData.standingOnBoatTick + 1;
+        if ( !isOnBoat ) {
+            standingOnBoatTick = 0;
+        }
+
+        sinceStandingOnBoatTick = lastMovementData.sinceStandingOnBoatTick + 1;
+        if ( isOnBoat ) {
+            sinceStandingOnBoatTick = 0;
+        }
+
+        vehicleTick = lastMovementData.vehicleTick + 1;
+        if ( player.getVehicle() == null ) {
+            vehicleTick = 0;
+        }
+
+        sinceVehicleTick = lastMovementData.sinceVehicleTick + 1;
+        if ( player.getVehicle() != null ) {
+            sinceVehicleTick = 0;
+        }
+
+
         serverFallDistance = lastMovementData.serverFallDistance;
         if ( !serverGround && currentY < lastY ) {
             serverFallDistance += currentDeltaY;
@@ -192,14 +247,25 @@ public class MovementData {
 
     }
 
-    private ArrayList<Block> getCollidingBlock(Location playerLocation) {
+    public ArrayList<Entity> getCollidingEntities(Location playerLocation) {
+        ArrayList<Entity> temp = new ArrayList<>();
+        for ( Entity e : playerLocation.getWorld().getEntities() ) {
+            Location el = e.getLocation().clone();
+            double dist = el.distance(playerLocation);
+            if ( dist < 1.6 && e.getUniqueId() != player.getUniqueId() ) {
+                //Bukkit.broadcastMessage(e.getType() + "=" + dist);
+                temp.add(e);
+            }
+        }
+        return temp;
+    }
 
+    private ArrayList<Block> getCollidingBlock(Location playerLocation) {
         ArrayList<Block> collidingBlocks = new ArrayList<>();
 
-        // Iterate over the blocks around the player's head and legs
         for (int xOffset = -1; xOffset <= 1; xOffset++) {
             for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                for (int yOffset = -1; yOffset <= 2; yOffset++) { // from -1 (above head) to 2 (below feet)
+                for (int yOffset = -1; yOffset <= 2; yOffset++) {
 
                     Block block = playerLocation.getWorld().getBlockAt(
                             playerLocation.getBlockX() + xOffset,
@@ -207,7 +273,9 @@ public class MovementData {
                             playerLocation.getBlockZ() + zOffset
                     );
 
-                    if (isColliding(playerLocation, block)) {
+                    if (isColliding(playerLocation, block) ||
+                            isColliding(playerLocation.clone().add(0,1,0), block) ||
+                            isColliding(playerLocation.clone().add(0,2,0), block)) {
                         collidingBlocks.add(block);
                     }
                 }
@@ -217,21 +285,22 @@ public class MovementData {
         return collidingBlocks;
     }
 
+
     private ArrayList<Block> getAboveBlock(Location playerLocation) {
 
         ArrayList<Block> collidingBlocks = new ArrayList<>();
 
         for (int xOffset = -1; xOffset <= 1; xOffset++) {
             for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                for (int yOffset = -1; yOffset <= 1; yOffset++) { // Changed yOffset range to include negative values
+                for (int yOffset = 0; yOffset <= 2; yOffset++) {
 
                     Block block = player.getWorld().getBlockAt(
                             playerLocation.getBlockX() + xOffset,
-                            playerLocation.getBlockY() + yOffset, // Note the change to use yOffset directly
+                            playerLocation.getBlockY() + yOffset,
                             playerLocation.getBlockZ() + zOffset
                     );
 
-                    if (isColliding(playerLocation, block)) collidingBlocks.add(block);
+                    if (isColliding(playerLocation.clone().add(0,1,0), block)) collidingBlocks.add(block);
                 }
             }
         }
@@ -286,6 +355,7 @@ public class MovementData {
         locBlock = locBlock.clone().add(0.5, 0.5, 0.5);
         Location locPlayer = playerLocation.clone();
         locPlayer.setY(locBlock.getY());
+
         double distance = Math.sqrt(
                 Math.pow(locBlock.getX() - locPlayer.getX(), 2) +
                         Math.pow(locBlock.getZ() - locPlayer.getZ(), 2)

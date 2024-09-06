@@ -22,16 +22,6 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 )
 public class ReachA extends Check {
 
-    // track for all entities location that in around 6 blocks from certain player
-    // for do this, everytime flying packet was sent,
-    // get all near entities to add on hashmap + array list with entityUUID<ARRAY<LocationTimeStamp>>. or simply arraylist<LocationTimeStamp>
-    //
-    // and with time stamp, save location exact time
-    // on attack, look for player's hit entity event and lookup the entity got hit (in near few ticks)
-    // get most nearest distance.
-    // make sure it is distance > 3.2
-    //
-
     ConcurrentLinkedDeque<LocationTimeStamp> locationTimeStamps = new ConcurrentLinkedDeque<>();
 
     @Override
@@ -71,9 +61,7 @@ public class ReachA extends Check {
 
             if ( minimumDistance == Double.MAX_VALUE ) return;
 
-            if ( minimumDistance > 3.5 ) {
-                flag("distance=" + minimumDistance);
-            }
+            if ( minimumDistance > 3.5 ) flag("distance=" + minimumDistance);
         }
     }
 

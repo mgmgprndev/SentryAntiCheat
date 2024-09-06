@@ -22,16 +22,14 @@ public class BadPacketA extends Check {
    // untested, my friend let me create this :thinking:
 
     @Override
-    public void handle(Packet packet) {
-        if ( packet instanceof PacketPlayInFlying && player.getVehicle() == null ) {
-            PacketPlayInFlying flying = (PacketPlayInFlying) packet;
-            if ( flying.g() ) {
-                s = 0;
-            } else {
-                if ( s++ > 20 ) flag("s="+s);
-            }
-        }
+    public void handle(MovementData data) {
+        if ( player.getVehicle() != null ) return;
 
+        if ( data.moving ) {
+            s = 0;
+        } else {
+            if ( s++ > 20 ) flag("s="+s);
+        }
     }
 
 }

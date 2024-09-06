@@ -17,6 +17,11 @@ public class GroundSpoofB extends Check {
     @Override
     public void handle(MovementData data)
     {
+
+        if ( data.sinceStandingOnBoatTick <= 2 ) return;
+        if ( data.sinceVehicleTick <= 2 ) return;
+
+
         if ( data.serverGroundTick > 15 &&
                data.clientAirTick > 15 ) {
             if (buffer++ > 5) {

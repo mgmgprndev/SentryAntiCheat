@@ -18,6 +18,9 @@ public class GroundSpoofC extends Check {
     public void handle(MovementData data)
     {
 
+        if ( data.sinceStandingOnBoatTick <= 2 ) return;
+        if ( data.sinceVehicleTick <= 2 ) return;
+
         if ( data.serverAirTick > 15 &&
                data.clientGroundTick > 15 ) {
             if (buffer++ > 5) {

@@ -18,7 +18,11 @@ public class GroundSpoofA extends Check {
     public void handle(MovementData data)
     {
 
+        if ( data.sinceStandingOnBoatTick <= 2 ) return;
+        if ( data.sinceVehicleTick <= 2 ) return;
         if ( data.sinceClimbTick < 15 ) return;
+        if ( data.sinceWebTick <= 2 ) return;
+
 
         if ( lastAirTick == 0 ) {
             lastAirTick = data.serverAirTick;

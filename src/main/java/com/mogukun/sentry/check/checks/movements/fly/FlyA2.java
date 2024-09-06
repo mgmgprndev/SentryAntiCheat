@@ -16,6 +16,8 @@ public class FlyA2 extends Check {
     {
         if ( data.sinceWaterTick < 20 ) return;
         if ( data.sinceClimbTick < 10  ) return;
+        if ( data.sinceWebTick < 10 ) return;
+        if ( data.sinceVehicleTick <= 2 ) return;
 
         double accel = data.currentDeltaY - data.lastDeltaY;
 

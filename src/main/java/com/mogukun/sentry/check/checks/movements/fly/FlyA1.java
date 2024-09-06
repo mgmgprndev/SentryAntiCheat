@@ -18,6 +18,9 @@ public class FlyA1 extends Check {
         if ( data.sinceWaterTick < 20 ) return;
         if ( data.serverGround ) return;
         if ( data.sinceClimbTick < 10  ) return;
+        if ( data.sinceWebTick < 10 ) return;
+        if ( data.sinceVehicleTick <= 5 ) return;
+
 
         double diff1 = data.lastGroundY - data.serverFallDistance;
         double diff2 = Math.abs(data.currentY - diff1);

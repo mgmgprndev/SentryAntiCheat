@@ -15,12 +15,10 @@ public class SpeedB extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if ( isBypass() || data.sinceVehicleTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
+        if ( isBypass() || data.sinceVehicleTick <= 5 || data.sinceStandingOnBoatTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
             buffer = 0;
             return;
         }
-
-        PlayerDataUtil dataUtil = new PlayerDataUtil(data.player);
 
         float predicted = (float) data.lastDeltaXZ * 0.91F + 0.026F;
         float difference = (float) data.currentDeltaXZ - predicted;

@@ -59,5 +59,9 @@ public abstract class Check implements Listener {
         return getPlayerUtil().isBypass();
     }
 
+    public long getPing() {
+        return getPlayerData().ping;
+    }
+
 
 }

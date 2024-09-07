@@ -5,6 +5,7 @@ import com.mogukun.sentry.check.PlayerDataManager;
 import com.mogukun.sentry.commands.SentryCommand;
 import com.mogukun.sentry.listeners.PacketHandler;
 import com.mogukun.sentry.listeners.PlayerListener;
+import com.mogukun.sentry.models.ServerTPS;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
@@ -22,6 +23,7 @@ public final class Sentry extends JavaPlugin {
     public CheckManager checkManager;
     public PlayerDataManager dataManager;
     public static Sentry instance;
+    public ServerTPS tps;
 
     public HashMap<UUID,Integer> alertStatus = new HashMap<>();
 
@@ -33,6 +35,7 @@ public final class Sentry extends JavaPlugin {
         System.out.println("[Sentry] Loading Sentry AntiCheat");
 
         this.instance = this;
+        this.tps = new ServerTPS();
         dataManager = new PlayerDataManager();
         checkManager = new CheckManager();
         getServer().getPluginManager().registerEvents( new PlayerListener(), this );

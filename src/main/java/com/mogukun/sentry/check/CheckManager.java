@@ -22,6 +22,7 @@ import com.mogukun.sentry.check.checks.players.inventory.InventoryA;
 import com.mogukun.sentry.check.checks.players.noslow.NoSlowFood;
 import com.mogukun.sentry.check.checks.players.noslow.NoSlowSword;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
+import com.mogukun.sentry.check.checks.players.timer.TimerB;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
@@ -73,6 +74,7 @@ public class CheckManager {
         checks.add( new GroundSpoofC() );
 
         checks.add( new TimerA() );
+        checks.add( new TimerB() );
 
         checks.add( new BadPacketA() );
         checks.add( new BadPacketB() );

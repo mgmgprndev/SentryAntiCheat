@@ -21,6 +21,7 @@ public class WaterWalkA extends Check {
         if (!data.isInLiquid) return;
         if (data.isHittingHead) return;
         if (data.serverGround) return;
+        if (data.sinceVehicleTick <= 5 || data.sinceStandingOnBoatTick <= 5) return;
 
         if ( data.currentDeltaY == data.lastDeltaY ) {
             int count = counter.count();

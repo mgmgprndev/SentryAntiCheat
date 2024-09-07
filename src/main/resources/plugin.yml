@@ -2,5 +2,6 @@ name: Sentry
 version: '${project.version}'
 main: com.mogukun.sentry.Sentry
 author: mogukun
+description: Packet Based Cheater Rekter (AntiCheat For 1.8)
 commands:
   sentry:

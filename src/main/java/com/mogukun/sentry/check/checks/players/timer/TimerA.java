@@ -1,5 +1,6 @@
 package com.mogukun.sentry.check.checks.players.timer;
 
+import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
@@ -22,7 +23,7 @@ public class TimerA extends Check {
     @Override
     public void handle(MovementData data) {
 
-        if ( System.currentTimeMillis() - startIgnore < 5000 ) return;
+        if ( System.currentTimeMillis() - startIgnore < 5000 || data.teleportTick <= 5 || data.respawnTick <= 5 ) return;
 
         long now = System.currentTimeMillis();
 

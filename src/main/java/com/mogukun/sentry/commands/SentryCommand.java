@@ -1,6 +1,7 @@
 package com.mogukun.sentry.commands;
 
 import com.mogukun.sentry.Sentry;
+import com.mogukun.sentry.check.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -30,17 +31,18 @@ public class SentryCommand implements CommandExecutor {
             if ( args.length == 0 )
             {
 
-                String temp = "&6&m----------------------------------------------------\n\n"
-                        + "\n\n"
+                String temp = "&6&m----------------------------------------------------\n"
+                        + "\n"
                         + "&6&l SentryAntiCheat " + Sentry.instance.getDescription().getVersion() + "\n"
-                        + "\n\n"
+                        + "\n"
                         + "&6/sentry - show information\n"
                         + "&6/sentry alerts - enable alert\n"
+                        + "&6/sentry ping <player> - get ping of player\n"
                         + "&6/sentry info <player> - get many information from database. \n"
-                        + "\n\n"
+                        + "\n"
                         + "&6&m----------------------------------------------------";
 
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', temp.replace("\n","<BR>").replace("<BR>","\n")));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',temp));
 
             }
             else if ( args.length == 1 )
@@ -62,17 +64,37 @@ public class SentryCommand implements CommandExecutor {
                 else if ( args[0].equalsIgnoreCase("info") ) {
                     player.sendMessage(chatColor("&c/sentry info <player>"));
                 }
+                else if ( args[0].equalsIgnoreCase("ping") ) {
+                    player.sendMessage(chatColor("&c/sentry ping <player>"));
+                }
             }
             else if ( args.length == 2 )
             {
-                Player target = Bukkit.getPlayer(args[1]);
-                if ( target == null ) {
-                    player.sendMessage(chatColor("&aOffline Player cannot lookup!"));
-                }
-                else
-                {
+                if ( args[0].equalsIgnoreCase("ping") ) {
+                    Player target = Bukkit.getPlayer(args[1]);
 
-                    // something do here
+                    if ( target == null ) {
+                        player.sendMessage(chatColor("&aOffline Player cannot lookup!"));
+                        return false;
+                    }
+
+                    PlayerData data = Sentry.instance.dataManager.getPlayerData(target);
+                    if ( data == null || data.ping == Long.MAX_VALUE ) {
+                        player.sendMessage(chatColor("&cSorry, couldn't get the ping."));
+                        return false;
+                    }
+                    long diff = System.currentTimeMillis() - data.lastInKeepAlive;
+
+                    player.sendMessage(chatColor("&a" + target.getName() + "'s ping is " + data.ping + "ms. (last checked: " + diff + "ms ago)"  ));
+                }
+                else if ( args[0].equalsIgnoreCase("info") ) {
+                    Player target = Bukkit.getPlayer(args[1]);
+                    if ( target == null ) {
+                        player.sendMessage(chatColor("&aOffline Player cannot lookup!"));
+                        return false;
+                    }
+
+
 
                 }
             }
@@ -86,6 +108,6 @@ public class SentryCommand implements CommandExecutor {
 
 
     private String chatColor(String s){
-        return ChatColor.translateAlternateColorCodes('&',prefix+s);
+        return ChatColor.translateAlternateColorCodes('&',prefix+"&r "+s);
     }
 }

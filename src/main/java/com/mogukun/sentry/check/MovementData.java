@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MovementData {
 
@@ -55,9 +56,13 @@ public class MovementData {
     public int standingOnBoatTick = 0, sinceStandingOnBoatTick = 0;
     public int vehicleTick = 0, sinceVehicleTick = 0;
 
+    public boolean isOnStair = false;
+    public int onStairTick = 0, sinceOnStairTick = 0;
+
 
     public double lastGroundY = 0, serverFallDistance = 0;
 
+    public int teleportTick = 0, sinceVelocityTaken = 0, respawnTick = 0;
 
     public long ping = 0;
 
@@ -70,6 +75,10 @@ public class MovementData {
 
         this.player = player;
         this.ping = Sentry.instance.dataManager.getPlayerData(player).ping;
+
+        teleportTick = Sentry.instance.dataManager.getPlayerData(player).teleportTick++;
+        sinceVelocityTaken = Sentry.instance.dataManager.getPlayerData(player).sinceVelocityTakenTick++;
+        respawnTick = Sentry.instance.dataManager.getPlayerData(player).respawnTick++;
 
         Location playerLoc =  new Location(player.getWorld(),x,y,z);
 
@@ -126,6 +135,11 @@ public class MovementData {
             if ( block.getType() == Material.WEB ) {
                 isInWeb = true;
             }
+
+            if ( block.getType().toString().contains("STAIR") || block.getType().toString().contains("SLAB") ){
+                isOnStair = true;
+            }
+
         }
 
         for ( Entity e : collidingEntity ) {
@@ -244,6 +258,15 @@ public class MovementData {
             sinceVehicleTick = 0;
         }
 
+        onStairTick = lastMovementData.onStairTick + 1;
+        if ( !isOnStair ) {
+            onStairTick = 0;
+        }
+
+        sinceOnStairTick = lastMovementData.sinceOnStairTick + 1;
+        if ( isOnStair ) {
+            sinceOnStairTick = 0;
+        }
 
         serverFallDistance = lastMovementData.serverFallDistance;
         if ( !serverGround && currentY < lastY ) {
@@ -256,7 +279,9 @@ public class MovementData {
 
     public ArrayList<Entity> getCollidingEntities(Location playerLocation) {
         ArrayList<Entity> temp = new ArrayList<>();
-        for ( Entity e : new ArrayList<>(playerLocation.getWorld().getEntities()) ) {
+        Iterator<Entity> iterator = playerLocation.getWorld().getEntities().iterator();
+        while ( iterator.hasNext() ) {
+            Entity e = iterator.next();
             Location el = e.getLocation().clone();
             double dist = el.distance(playerLocation);
             if ( dist < 1.6 && e.getUniqueId() != player.getUniqueId() ) {

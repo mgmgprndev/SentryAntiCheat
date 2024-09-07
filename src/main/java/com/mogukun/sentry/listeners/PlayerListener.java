@@ -10,12 +10,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 
 import java.util.concurrent.Executors;
 
@@ -43,7 +41,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event){
-        call(event.getPlayer(), event);
+        Player player = event.getPlayer();
+        call(player, event);
+        Sentry.instance.dataManager.getPlayerData(player).teleportTick = 0;
     }
 
     @EventHandler
@@ -61,6 +61,25 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onClickInv(InventoryClickEvent event) {
         call((Player) event.getWhoClicked(), event);
+    }
+
+    @EventHandler
+    public void onVelocity(PlayerVelocityEvent event){
+        Player player = event.getPlayer();
+        call(player, event);
+        Sentry.instance.dataManager.getPlayerData(player).sinceVelocityTakenTick = 0;
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event){
+        call(event.getEntity(), event);
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event){
+        Player player = event.getPlayer();
+        call(player, event);
+        Sentry.instance.dataManager.getPlayerData(player).respawnTick = 0;
     }
 
 

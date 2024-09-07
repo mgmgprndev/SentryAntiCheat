@@ -12,14 +12,14 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @CheckInfo(
         name = "Reach (A)",
         description = "A Shit Reach Check",
-        category = Category.COMBAT,
-        experimental = true
+        category = Category.COMBAT
 )
 public class ReachA extends Check {
 
@@ -33,7 +33,9 @@ public class ReachA extends Check {
         Location playerLocation = player.getLocation().clone();
         ping = data.ping;
 
-        for ( Entity ent : new ArrayList<>(player.getWorld().getEntities()) ) {
+        Iterator<Entity> iterator = player.getWorld().getEntities().iterator();
+        while ( iterator.hasNext() ) {
+            Entity ent = iterator.next();
             Location  entLocation = ent.getLocation().clone();
             double dist = entLocation.distance(playerLocation);
             if ( dist < 10 ) {

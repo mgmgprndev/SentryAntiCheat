@@ -8,8 +8,7 @@ import com.mogukun.sentry.check.MovementData;
 @CheckInfo(
         name = "Fly (C)",
         description = "Incorrect Air Vertical Motion",
-        category = Category.MOVEMENT,
-        experimental = true
+        category = Category.MOVEMENT
 )
 public class FlyC extends Check {
 

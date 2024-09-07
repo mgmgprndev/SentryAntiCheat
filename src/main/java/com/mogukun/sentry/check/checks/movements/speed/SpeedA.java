@@ -1,5 +1,6 @@
 package com.mogukun.sentry.check.checks.movements.speed;
 
+import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.*;
 import org.bukkit.potion.PotionEffectType;
 
@@ -15,12 +16,12 @@ public class SpeedA extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if ( data.sinceVehicleTick <= 5 ) return;
+        if ( data.sinceVehicleTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) return;
 
         PlayerDataUtil dataUtil = new PlayerDataUtil(data.player);
 
         double maxDeltaXZ = data.lastDeltaXZ * 1.8;
-        maxDeltaXZ += dataUtil.getAmplifier(PotionEffectType.SPEED) * 0.1F;
+        maxDeltaXZ += 0.13 * dataUtil.getAmplifier(PotionEffectType.SPEED) * 0.2F;
 
         if ( data.currentDeltaXZ > maxDeltaXZ ) {
 

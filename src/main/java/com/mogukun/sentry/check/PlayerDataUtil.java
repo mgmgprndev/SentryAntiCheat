@@ -13,9 +13,9 @@ public class PlayerDataUtil {
 
     public int getAmplifier(PotionEffectType type) {
         for ( PotionEffect e : player.getActivePotionEffects() ) {
-            if ( e.getType() == type ) return e.getAmplifier();
+            if ( e.getType().equals(type) ) return e.getAmplifier();
         }
-        return 0;
+        return -1;
     }
 
 

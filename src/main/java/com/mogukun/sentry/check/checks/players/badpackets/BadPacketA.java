@@ -19,8 +19,6 @@ public class BadPacketA extends Check {
 
     int s = 0;
 
-   // untested, my friend let me create this :thinking:
-
     @Override
     public void handle(MovementData data) {
         if ( player.getVehicle() != null ) return;

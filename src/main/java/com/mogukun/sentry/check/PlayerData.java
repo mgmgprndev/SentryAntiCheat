@@ -8,6 +8,8 @@ public class PlayerData {
 
     public long lastOutKeepAlive;
     public long lastInKeepAlive;
-    public long ping;
+    public long ping = Long.MAX_VALUE;
+
+    public int teleportTick = 0, sinceVelocityTakenTick = 0, respawnTick = 0;
 
 }

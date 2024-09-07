@@ -2,19 +2,22 @@ package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.checks.combats.aura.AuraA;
+import com.mogukun.sentry.check.checks.combats.aura.AuraB;
+import com.mogukun.sentry.check.checks.combats.aura.AuraC;
 import com.mogukun.sentry.check.checks.combats.autoclicker.AutoClickerA;
 import com.mogukun.sentry.check.checks.combats.reach.ReachA;
-import com.mogukun.sentry.check.checks.movements.fly.FlyA1;
-import com.mogukun.sentry.check.checks.movements.fly.FlyA2;
-import com.mogukun.sentry.check.checks.movements.fly.FlyB;
+import com.mogukun.sentry.check.checks.movements.fly.*;
 import com.mogukun.sentry.check.checks.movements.motion.MotionA;
-import com.mogukun.sentry.check.checks.movements.fly.FlyC;
 import com.mogukun.sentry.check.checks.movements.speed.SpeedA;
+import com.mogukun.sentry.check.checks.movements.speed.SpeedB;
+import com.mogukun.sentry.check.checks.movements.speed.SpeedC;
+import com.mogukun.sentry.check.checks.movements.speed.SpeedD;
 import com.mogukun.sentry.check.checks.movements.wallclimb.WallClimbA;
 import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
 import com.mogukun.sentry.check.checks.players.badpackets.BadPacketA;
 import com.mogukun.sentry.check.checks.players.badpackets.BadPacketB;
 import com.mogukun.sentry.check.checks.players.badpackets.BadPacketC;
+import com.mogukun.sentry.check.checks.players.badpackets.BadPacketD;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofA;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofB;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofC;
@@ -42,17 +45,26 @@ public class CheckManager {
     public CheckManager(){
 
         checks.add( new AuraA() );
+        checks.add( new AuraB() );
+        checks.add( new AuraC() );
+
         checks.add( new AutoClickerA() );
         checks.add( new ReachA() );
 
         checks.add( new FlyA1() );
         checks.add( new FlyA2() );
         checks.add( new FlyB() );
+        checks.add( new FlyC() );
+        checks.add( new FlyD() );
+        checks.add( new FlyE() );
 
         checks.add( new SpeedA() );
+        checks.add( new SpeedB() );
+        checks.add( new SpeedC() );
+        checks.add( new SpeedD() );
 
         checks.add( new MotionA() );
-        checks.add( new FlyC() );
+
 
         checks.add( new WaterWalkA() );
         checks.add( new WallClimbA() );
@@ -62,11 +74,11 @@ public class CheckManager {
         checks.add( new GroundSpoofC() );
 
         checks.add( new TimerA() );
-        //checks.add( new TimerB() );
 
         checks.add( new BadPacketA() );
         checks.add( new BadPacketB() );
         checks.add( new BadPacketC() );
+        checks.add( new BadPacketD() );
 
         checks.add( new InventoryA() );
         checks.add( new NoSlowA() );

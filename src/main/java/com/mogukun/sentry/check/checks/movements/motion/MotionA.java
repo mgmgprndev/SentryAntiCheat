@@ -6,8 +6,7 @@ import org.bukkit.potion.PotionEffectType;
 @CheckInfo(
         name = "Motion (A)",
         description = "Impossible Movement",
-        category = Category.MOVEMENT,
-        experimental = true
+        category = Category.MOVEMENT
 )
 public class MotionA extends Check {
 

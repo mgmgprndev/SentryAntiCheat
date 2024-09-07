@@ -1,18 +1,16 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
 
 public class MovementData {
 
@@ -80,6 +78,12 @@ public class MovementData {
         sinceVelocityTaken = Sentry.instance.dataManager.getPlayerData(player).sinceVelocityTakenTick++;
         respawnTick = Sentry.instance.dataManager.getPlayerData(player).respawnTick++;
 
+        Sentry.instance.dataManager.getPlayerData(player).sinceFlying++;
+        if ( player.isFlying() ) {
+            Sentry.instance.dataManager.getPlayerData(player).sinceFlying = 0;
+            Sentry.instance.dataManager.getPlayerData(player).backOnGroundSinceFly = false;
+        }
+
         Location playerLoc =  new Location(player.getWorld(),x,y,z);
 
         colliding = getCollidingBlock( playerLoc );
@@ -107,6 +111,7 @@ public class MovementData {
                     onBlock ) {
 
                 serverGround = true;
+                Sentry.instance.dataManager.getPlayerData(player).backOnGroundSinceFly = true;
             }
             if (block.getType().toString().contains("ICE") && onBlock) {
                 isOnIce = true;
@@ -278,16 +283,22 @@ public class MovementData {
     }
 
     public ArrayList<Entity> getCollidingEntities(Location playerLocation) {
+        ArrayList<Entity> entities;
+
+        synchronized (playerLocation.getWorld()) {
+            entities = new ArrayList<>(playerLocation.getWorld().getEntities());
+        }
+
         ArrayList<Entity> temp = new ArrayList<>();
-        Iterator<Entity> iterator = playerLocation.getWorld().getEntities().iterator();
-        while ( iterator.hasNext() ) {
-            Entity e = iterator.next();
+
+        for (Entity e : entities) {
             Location el = e.getLocation().clone();
             double dist = el.distance(playerLocation);
-            if ( dist < 1.6 && e.getUniqueId() != player.getUniqueId() ) {
+            if (dist < 1.6 && e.getUniqueId() != player.getUniqueId()) {
                 temp.add(e);
             }
         }
+
         return temp;
     }
 

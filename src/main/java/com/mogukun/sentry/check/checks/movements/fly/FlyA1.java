@@ -15,6 +15,7 @@ public class FlyA1 extends Check {
     @Override
     public void handle(MovementData data)
     {
+        if ( isBypass() ) return;
         if ( data.sinceWaterTick < 20 ) return;
         if ( data.serverGround ) return;
         if ( data.sinceClimbTick < 10  ) return;

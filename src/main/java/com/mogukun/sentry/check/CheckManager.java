@@ -14,20 +14,19 @@ import com.mogukun.sentry.check.checks.movements.speed.SpeedC;
 import com.mogukun.sentry.check.checks.movements.speed.SpeedD;
 import com.mogukun.sentry.check.checks.movements.wallclimb.WallClimbA;
 import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
-import com.mogukun.sentry.check.checks.players.badpackets.BadPacketA;
-import com.mogukun.sentry.check.checks.players.badpackets.BadPacketB;
-import com.mogukun.sentry.check.checks.players.badpackets.BadPacketC;
-import com.mogukun.sentry.check.checks.players.badpackets.BadPacketD;
+import com.mogukun.sentry.check.checks.players.badpackets.*;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofA;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofB;
 import com.mogukun.sentry.check.checks.players.groundspoof.GroundSpoofC;
 import com.mogukun.sentry.check.checks.players.inventory.InventoryA;
-import com.mogukun.sentry.check.checks.players.noslow.NoSlowA;
+import com.mogukun.sentry.check.checks.players.noslow.NoSlowFood;
+import com.mogukun.sentry.check.checks.players.noslow.NoSlowSword;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
 import net.minecraft.server.v1_8_R3.PacketPlayOutKeepAlive;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -79,9 +78,11 @@ public class CheckManager {
         checks.add( new BadPacketB() );
         checks.add( new BadPacketC() );
         checks.add( new BadPacketD() );
+        checks.add( new BadPacketE() );
 
         checks.add( new InventoryA() );
-        checks.add( new NoSlowA() );
+        checks.add( new NoSlowFood() );
+        checks.add( new NoSlowSword() );
     }
 
     public HashMap<UUID,ArrayList<Check>> checkMap = new HashMap<>();

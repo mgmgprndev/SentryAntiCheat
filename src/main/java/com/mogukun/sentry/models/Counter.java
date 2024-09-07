@@ -16,6 +16,12 @@ public class Counter {
         return getCount();
     }
 
+    public void decrease() {
+        if (!counts.isEmpty()) {
+            counts.remove(0);
+        }
+    }
+
     public int getCount() {
         Iterator<Long> iterator = counts.iterator();
         while (iterator.hasNext()) {

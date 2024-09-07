@@ -18,7 +18,8 @@ public class FlyE extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if ( data.serverAirTick <= 6 ) {
+
+        if ( isBypass() || data.serverAirTick <= 6 ) {
             counter.reset();
             return;
         }

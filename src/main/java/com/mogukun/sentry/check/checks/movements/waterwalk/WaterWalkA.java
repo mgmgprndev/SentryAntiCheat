@@ -1,6 +1,7 @@
 package com.mogukun.sentry.check.checks.movements.waterwalk;
 
 import com.mogukun.sentry.check.*;
+import com.mogukun.sentry.models.Counter;
 import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
@@ -11,22 +12,25 @@ import org.bukkit.potion.PotionEffectType;
 public class WaterWalkA extends Check {
 
 
-    int buffer = 0;
+    Counter counter = new Counter();
 
     @Override
     public void handle(MovementData data)
     {
+        if ( isBypass() ) return;
         if (!data.isInLiquid) return;
         if (data.isHittingHead) return;
         if (data.serverGround) return;
 
         if ( data.currentDeltaY == data.lastDeltaY ) {
-            if ( buffer++ > 2 ) {
-                flag();
-                buffer = 0;
+            int count = counter.count();
+            if ( count > 5 ) {
+                flag("count=" + count );
+            } else {
+                debug("count=" + count);
             }
         } else {
-            buffer -= buffer > 0 ? 1 : 0;
+            counter.decrease();
         }
     }
 

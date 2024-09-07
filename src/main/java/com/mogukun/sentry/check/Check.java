@@ -47,5 +47,17 @@ public abstract class Check implements Listener {
 
     public void event(Event event) {}
 
+    public PlayerData getPlayerData() {
+        return Sentry.instance.dataManager.getPlayerData(player);
+    }
+
+    public PlayerDataUtil getPlayerUtil() {
+        return new PlayerDataUtil(player);
+    }
+
+    public boolean isBypass() {
+        return getPlayerUtil().isBypass();
+    }
+
 
 }

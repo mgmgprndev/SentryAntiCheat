@@ -1,6 +1,5 @@
 package com.mogukun.sentry.check.checks.combats.reach;
 
-import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
@@ -12,10 +11,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
-
 @CheckInfo(
         name = "Reach (A)",
         description = "A Shit Reach Check",
@@ -33,9 +30,13 @@ public class ReachA extends Check {
         Location playerLocation = player.getLocation().clone();
         ping = data.ping;
 
-        Iterator<Entity> iterator = player.getWorld().getEntities().iterator();
-        while ( iterator.hasNext() ) {
-            Entity ent = iterator.next();
+        ArrayList<Entity> entities;
+
+        synchronized (playerLocation.getWorld()) {
+            entities = new ArrayList<>(playerLocation.getWorld().getEntities());
+        }
+
+        for ( Entity ent : entities ) {
             Location  entLocation = ent.getLocation().clone();
             double dist = entLocation.distance(playerLocation);
             if ( dist < 10 ) {

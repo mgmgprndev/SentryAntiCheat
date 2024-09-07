@@ -10,6 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -57,6 +58,12 @@ public class PlayerListener implements Listener {
     public void onClick(PlayerInteractEvent event){
         call(event.getPlayer(), event);
     }
+
+    @EventHandler
+    public void onFoodLevel(FoodLevelChangeEvent event){
+        call( (Player) event.getEntity(), event);
+    }
+
 
     @EventHandler
     public void onClickInv(InventoryClickEvent event) {

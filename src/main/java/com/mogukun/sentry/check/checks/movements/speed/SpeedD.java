@@ -17,7 +17,7 @@ public class SpeedD extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if ( !data.moving || data.sinceVehicleTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
+        if ( isBypass() || !data.moving || data.sinceVehicleTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
             balance = 0;
             return;
         }

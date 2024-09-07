@@ -17,6 +17,8 @@ public class FlyD extends Check {
     @Override
     public void handle(MovementData data)
     {
+
+        if ( isBypass() ) return;
         if ( !data.moving ) return;
         if ( data.currentDeltaY > 1 ) return;
         if ( data.serverAirTick <= 16 ) {

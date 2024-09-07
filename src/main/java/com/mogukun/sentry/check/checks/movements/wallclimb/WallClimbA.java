@@ -15,7 +15,8 @@ public class WallClimbA extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if (data.sinceWaterTick < 20) return;
+        if ( isBypass() ) return;
+        if ( data.sinceWaterTick < 20) return;
         if ( !data.hasHorizontallyColliding ) return;
         if ( data.sinceClimbTick < 15 ) return;
 

@@ -19,7 +19,7 @@ public class SpeedC extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if ( data.sinceVehicleTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
+        if ( isBypass() || data.sinceVehicleTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
             buffer = 0;
             return;
         }

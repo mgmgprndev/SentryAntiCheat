@@ -20,7 +20,7 @@ public class FlyC extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if ( !data.moving ) return;
+        if ( isBypass() || !data.moving ) return;
         if ( data.serverAirTick <= 20 ) {
             airTotalDelta = 0;
             airTotalMotion = 0;

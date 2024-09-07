@@ -23,6 +23,9 @@ public class AuraC extends Check {
             lastArm = now;
         }
         if ( packet instanceof PacketPlayInUseEntity ) {
+
+            if ( ((PacketPlayInUseEntity) packet).a() != PacketPlayInUseEntity.EnumEntityUseAction.ATTACK ) return;
+
             long diff = now - lastArm;
 
             if ( diff > 10 ) {

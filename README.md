@@ -4,13 +4,13 @@ Detects Fly, Speed, WaterWalk, NoFall, Timer etc... (:
 And Free........ HaHa!
 
 # Issues
-currently not found.
+1. WallClimb falses if jump near wall.
+2. WaterWalk falses if in water and move vertically slowly. 
 
 # ToDo (It will delay a lot)
 1. Customize Alert System - allows use many customized alerts!
 2. GUI, Useful commands - make it easier to use, moderators will be happy.
 3. Configuration System - make it allows disable, enable or configure checks. (This is not easy btw....)
-4. Create Past Location Reach, KillAura Check(s) - planning. im really not good at this.
 5. Auto Punish System - let's ban player cuz they cheating!
 
 # Command ToDo

@@ -5,7 +5,6 @@ And Free........ HaHa!
 
 # Issues
 1. WallClimb falses if jump near wall.
-2. WaterWalk falses if in water and move vertically slowly. 
 
 # ToDo (It will delay a lot)
 1. Customize Alert System - allows use many customized alerts!

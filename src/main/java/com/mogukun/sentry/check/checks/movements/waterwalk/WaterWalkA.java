@@ -27,8 +27,6 @@ public class WaterWalkA extends Check {
             int count = counter.count();
             if ( count > 5 ) {
                 flag("count=" + count );
-            } else {
-                debug("count=" + count);
             }
         } else {
             counter.decrease();

@@ -5,6 +5,7 @@ import com.mogukun.sentry.check.checks.combats.aura.AuraA;
 import com.mogukun.sentry.check.checks.combats.aura.AuraB;
 import com.mogukun.sentry.check.checks.combats.aura.AuraC;
 import com.mogukun.sentry.check.checks.combats.autoclicker.AutoClickerA;
+import com.mogukun.sentry.check.checks.combats.blockhit.BlockHitA;
 import com.mogukun.sentry.check.checks.combats.reach.ReachA;
 import com.mogukun.sentry.check.checks.movements.fly.*;
 import com.mogukun.sentry.check.checks.movements.motion.MotionA;
@@ -48,6 +49,8 @@ public class CheckManager {
         checks.add( new AuraB() );
         checks.add( new AuraC() );
 
+        checks.add( new BlockHitA() );
+
         checks.add( new AutoClickerA() );
         checks.add( new ReachA() );
 
@@ -81,6 +84,7 @@ public class CheckManager {
         checks.add( new BadPacketC() );
         checks.add( new BadPacketD() );
         checks.add( new BadPacketE() );
+        checks.add( new BadPacketF() );
 
         checks.add( new InventoryA() );
         checks.add( new NoSlowFood() );

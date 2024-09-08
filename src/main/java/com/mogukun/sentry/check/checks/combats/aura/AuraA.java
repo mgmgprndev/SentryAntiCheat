@@ -27,10 +27,13 @@ public class AuraA extends Check {
             EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
             long now = System.currentTimeMillis();
             UUID uuid = e.getEntity().getUniqueId();
+
             hits.add( new EntityHitData(uuid) );
             hits.removeIf(h-> now - h.timestamp > 300);
+
             double sus = 0;
             int entity = 0;
+
             ArrayList<UUID> uuids = new ArrayList<>();
             for ( EntityHitData d : hits ) {
                 double diff = now - d.timestamp;

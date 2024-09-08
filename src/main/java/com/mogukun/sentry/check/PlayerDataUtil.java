@@ -35,6 +35,10 @@ public class PlayerDataUtil {
             return true;
         }
 
+        if ( player.isDead() ) {
+            return true;
+        }
+
         return false;
 
     }

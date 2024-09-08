@@ -8,7 +8,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.UUID;
 
 public class SentryCommand implements CommandExecutor {
@@ -31,15 +39,15 @@ public class SentryCommand implements CommandExecutor {
             if ( args.length == 0 )
             {
 
-                String temp = "&6&m----------------------------------------------------\n"
-                        + "\n"
+                String temp = "&6&m----------------------------------------------------&r\n"
+                        + " \n"
                         + "&6&l SentryAntiCheat " + Sentry.instance.getDescription().getVersion() + "\n"
-                        + "\n"
-                        + "&6/sentry - show information\n"
-                        + "&6/sentry alerts - enable alert\n"
-                        + "&6/sentry ping <player> - get ping of player\n"
-                        + "&6/sentry info <player> - get many information from database. \n"
-                        + "\n"
+                        + " \n"
+                        + "&6 /sentry - show information\n"
+                        + "&6 /sentry alerts - enable alert\n"
+                        + "&6 /sentry ping <player> - get ping of player\n"
+                        + "&6 /sentry info <player> - get info from ip-api.com\n"
+                        + " \n"
                         + "&6&m----------------------------------------------------";
 
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',temp));
@@ -86,15 +94,26 @@ public class SentryCommand implements CommandExecutor {
                     long diff = System.currentTimeMillis() - data.lastInKeepAlive;
 
                     player.sendMessage(chatColor("&a" + target.getName() + "'s ping is " + data.ping + "ms. (last checked: " + diff + "ms ago)"  ));
-                }
-                else if ( args[0].equalsIgnoreCase("info") ) {
-                    Player target = Bukkit.getPlayer(args[1]);
-                    if ( target == null ) {
-                        player.sendMessage(chatColor("&aOffline Player cannot lookup!"));
+                } else if ( args[0].equalsIgnoreCase("info") ) {
+
+
+                    String target = args[1];
+                    Player targetPlayer = Bukkit.getPlayer(args[1]);
+                    String name = "", ip = "";
+
+                    if ( isValidIP(target) ) {
+                        name = target;
+                        ip = target;
+                    } else if ( targetPlayer != null ) {
+                        name = targetPlayer.getName();
+                        ip = targetPlayer.getAddress().getAddress().getHostAddress();
+                    } else {
+                        player.sendMessage(chatColor("&a'" + target + "' is not valid IP or Online Player Name."));
                         return false;
                     }
 
-
+                    player.sendMessage(chatColor("&cLooking up..."));
+                    runCheck(ip, name, player);
 
                 }
             }
@@ -106,6 +125,75 @@ public class SentryCommand implements CommandExecutor {
         return false;
     }
 
+    private void runCheck(String ip, String name, Player player) {
+        new Thread(() -> {
+            String apiUrl = "http://ip-api.com/json/" + ip;
+
+            try {
+                URL url = new URL(apiUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                JSONObject jsonResponse = new JSONObject(response.toString());
+                String status = jsonResponse.optString("status");
+
+                if ( !status.equalsIgnoreCase("success") ) {
+                    player.sendMessage(chatColor("&cError, Message: " + jsonResponse.optString("message") ));
+                    return;
+                }
+
+                String continent = jsonResponse.optString("continent", "Unknown");
+                String country = jsonResponse.optString("country", "Unknown");
+                String region = jsonResponse.optString("regionName", "Unknown");
+                String city = jsonResponse.optString("city", "Unknown");
+                String zip = jsonResponse.optString("zip", "Unknown");
+                String isp = jsonResponse.optString("isp", "Unknown");
+                String asn = jsonResponse.optString("as", "Unknown");
+
+                String temp = "&6&m----------------------------------------------------&r\n"
+                        + " \n"
+                        + "&6&l LOOK UP RESULT OF &r&6" + name + "&l!\n"
+                        + " \n"
+                        + ( name == ip ? "&6 IP: " + ip + "\n \n" : "" )
+                        + "&6 Address: \n"
+                        + "&6 | Continent: " + continent + "\n"
+                        + "&6 | Country: " + country + "\n"
+                        + "&6 | Region: " + region + "\n"
+                        + "&6 | City: " + city + "\n"
+                        + "&6 | ZIP: " + zip + "\n"
+                        + " \n"
+                        + "&6 ISP: \n"
+                        + "&6 | ISP: " + isp + "\n"
+                        + "&6 | ASN: " + asn + "\n"
+                        + " \n"
+                        + "&6&m----------------------------------------------------";
+
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',temp));
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private boolean isValidIP(String ip) {
+        try {
+            InetAddress ignored = InetAddress.getByName(ip);
+            return true;
+        } catch (UnknownHostException e) {
+            return false;
+        }
+    }
 
     private String chatColor(String s){
         return ChatColor.translateAlternateColorCodes('&',prefix+"&r "+s);

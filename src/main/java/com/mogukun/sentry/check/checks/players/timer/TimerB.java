@@ -77,6 +77,7 @@ public class TimerB extends Check {
                 if ( diffAvg > 1 ) {
                     buffer += diffAvg;
                     buffer -= 1.5;
+
                     if ( buffer >= 15 ) {
                         flag("buffer=" + buffer + " realAvg=" + realAvg + " predAvg=" + predAvg );
                         buffer = 0;

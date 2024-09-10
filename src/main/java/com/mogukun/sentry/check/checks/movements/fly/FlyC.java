@@ -17,10 +17,20 @@ public class FlyC extends Check {
     double airTotalMotion = 0;
     double buffer = 0;
 
+    int tickSinceUpward = 0;
+
     @Override
     public void handle(MovementData data)
     {
         if ( isBypass() || !data.moving ) return;
+
+        tickSinceUpward++;
+        if ( data.lastY < data.currentY ) {
+            tickSinceUpward = 0;
+            return;
+        }
+        if ( tickSinceUpward < 5 ) return;
+
         if ( data.serverAirTick <= 20 ) {
             airTotalDelta = 0;
             airTotalMotion = 0;

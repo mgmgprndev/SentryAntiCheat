@@ -1,7 +1,10 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTransaction;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.GameMode;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -41,6 +44,24 @@ public class PlayerDataUtil {
 
         return false;
 
+    }
+
+    public void runTransactionPingCheck() {
+        if ( Sentry.instance.dataManager.getPlayerData(player).runningTransactionPingCheck ) return;
+        Sentry.instance.dataManager.getPlayerData(player).runningTransactionPingCheck = true;
+
+
+        CraftPlayer cp = (CraftPlayer) player;
+        PlayerConnection pc = cp.getHandle().playerConnection;
+        pc.sendPacket( new PacketPlayOutTransaction() );
+        Sentry.instance.dataManager.getPlayerData(player).transactionSent = System.currentTimeMillis();
+
+    }
+
+    public void onTransaction() {
+        if ( !Sentry.instance.dataManager.getPlayerData(player).runningTransactionPingCheck ) return;
+        Sentry.instance.dataManager.getPlayerData(player).transactionPing = System.currentTimeMillis() - Sentry.instance.dataManager.getPlayerData(player).transactionSent;
+        Sentry.instance.dataManager.getPlayerData(player).runningTransactionPingCheck = false;
     }
 
 

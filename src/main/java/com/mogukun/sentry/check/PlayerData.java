@@ -1,11 +1,14 @@
 package com.mogukun.sentry.check;
 
-import org.bukkit.entity.Player;
-
 public class PlayerData {
     public PlayerData() {}
 
     public MovementData data = null;
+
+    boolean runningTransactionPingCheck = false;
+    long transactionSent = 0;
+    public long transactionReceived = 0;
+    public long transactionPing = Long.MAX_VALUE;
 
     public long lastOutKeepAlive;
     public long lastInKeepAlive;

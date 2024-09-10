@@ -11,6 +11,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 @CheckInfo(
@@ -30,17 +31,19 @@ public class ReachA extends Check {
         Location playerLocation = player.getLocation().clone();
         ping = data.ping;
 
-        ArrayList<Entity> entities;
+        List<Entity> entities;
 
         synchronized (playerLocation.getWorld()) {
-            entities = new ArrayList<>(playerLocation.getWorld().getEntities());
+            entities = new ArrayList<>(playerLocation.getWorld().getEntities()); // Shallow copy
         }
 
         for ( Entity ent : entities ) {
-            Location  entLocation = ent.getLocation().clone();
-            double dist = entLocation.distance(playerLocation);
-            if ( dist < 10 ) {
-                locationTimeStamps.add(new LocationTimeStamp(ent.getUniqueId(), entLocation));
+            synchronized (ent) {
+                Location  entLocation = ent.getLocation().clone();
+                double dist = entLocation.distance(playerLocation);
+                if ( dist < 10 ) {
+                    locationTimeStamps.add(new LocationTimeStamp(ent.getUniqueId(), entLocation));
+                }
             }
         }
 

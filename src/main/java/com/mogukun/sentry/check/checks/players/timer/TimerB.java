@@ -72,6 +72,10 @@ public class TimerB extends Check {
                 for ( long difference : predList ) sum2 += difference;
                 long predAvg = sum2 / predList.size();
 
+                if ( !Sentry.instance.tps.lagging ) {
+                    predAvg = Math.abs(predAvg / 10) * 10;
+                }
+
                 long diffAvg = Math.abs(realAvg - predAvg);
 
                 if ( diffAvg > 1 ) {

@@ -13,7 +13,7 @@ public class ServerTPS {
     double tps = 20;
     double exemptTps = 18;
 
-    boolean lagging = false;
+    public boolean lagging = false;
     long lastTick = 0;
 
     public ServerTPS() {

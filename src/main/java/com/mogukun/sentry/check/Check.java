@@ -15,7 +15,7 @@ import org.bukkit.event.Listener;
 
 import java.util.UUID;
 
-public abstract class Check implements Listener {
+public abstract class Check implements Listener, Cloneable{
 
     public CheckInfo checkInfo;
     public Player player;
@@ -63,5 +63,19 @@ public abstract class Check implements Listener {
         return getPlayerData().ping;
     }
 
+    public long getTransactionPing() {
+        new PlayerDataUtil(player).runTransactionPingCheck();
+        return getPlayerData().transactionPing;
+    }
+
+
+    @Override
+    public Check clone() {
+        try {
+            return (Check) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone not supported", e);
+        }
+    }
 
 }

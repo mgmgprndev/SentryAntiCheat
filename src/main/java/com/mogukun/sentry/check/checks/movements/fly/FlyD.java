@@ -13,6 +13,7 @@ import com.mogukun.sentry.check.MovementData;
 public class FlyD extends Check {
 
     double buffer = 0;
+    int tickSinceUpward = 0;
 
     @Override
     public void handle(MovementData data)
@@ -20,6 +21,12 @@ public class FlyD extends Check {
 
         if ( isBypass() ) return;
         if ( !data.moving ) return;
+        tickSinceUpward++;
+        if ( data.lastY < data.currentY ) {
+            tickSinceUpward = 0;
+            return;
+        }
+        if ( tickSinceUpward < 5 ) return;
         if ( data.currentDeltaY > 1 ) return;
         if ( data.serverAirTick <= 16 ) {
             buffer = 0;

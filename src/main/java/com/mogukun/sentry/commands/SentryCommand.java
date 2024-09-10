@@ -2,6 +2,7 @@ package com.mogukun.sentry.commands;
 
 import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.PlayerData;
+import com.mogukun.sentry.check.PlayerDataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -48,6 +49,10 @@ public class SentryCommand implements CommandExecutor {
                         + "&6 /sentry ping <player> - get ping of player\n"
                         + "&6 /sentry info <player> - get info from ip-api.com\n"
                         + " \n"
+                        + "&6 Only For Testing: \n"
+                        + "&6 /sentry debug - show alerts of you only to you\n"
+                        + "&6 /sentry test-server - test server mode is everyone see own alerts\n"
+                        + " \n"
                         + "&6&m----------------------------------------------------";
 
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',temp));
@@ -60,9 +65,12 @@ public class SentryCommand implements CommandExecutor {
                     UUID uuid = player.getUniqueId();
                     Sentry.instance.alertStatus.putIfAbsent(uuid,0);
 
-                    if ( Sentry.instance.alertStatus.get(uuid) != 0 ) {
+                    if ( Sentry.instance.alertStatus.get(uuid) == 1 ) {
                         Sentry.instance.alertStatus.put(uuid, 0);
                         player.sendMessage(chatColor("&a Alert is &cDisabled"));
+                    } else if ( Sentry.instance.alertStatus.get(uuid) == 2 ) {
+                        Sentry.instance.alertStatus.put(uuid, 1);
+                        player.sendMessage(chatColor("&a Debug is &cDisabled&a and Alert is Enabled"));
                     } else {
                         Sentry.instance.alertStatus.put(uuid, 1);
                         player.sendMessage(chatColor("&a Alert is Enabled"));
@@ -74,6 +82,31 @@ public class SentryCommand implements CommandExecutor {
                 }
                 else if ( args[0].equalsIgnoreCase("ping") ) {
                     player.sendMessage(chatColor("&c/sentry ping <player>"));
+                }
+                else if ( args[0].toLowerCase().startsWith("debug") )
+                {
+                    UUID uuid = player.getUniqueId();
+                    Sentry.instance.alertStatus.putIfAbsent(uuid,0);
+
+                    if ( Sentry.instance.alertStatus.get(uuid) == 2 ) {
+                        Sentry.instance.alertStatus.put(uuid, 0);
+                        player.sendMessage(chatColor("&a Debug is &cDisabled"));
+                    } else if ( Sentry.instance.alertStatus.get(uuid) == 1 ) {
+                        Sentry.instance.alertStatus.put(uuid, 2);
+                        player.sendMessage(chatColor("&a Alert is &cDisabled&a and Debug is Enabled"));
+                    } else {
+                        Sentry.instance.alertStatus.put(uuid, 2);
+                        player.sendMessage(chatColor("&a Debug is Enabled"));
+                    }
+                }else if ( args[0].toLowerCase().startsWith("test-server") )
+                {
+                    if ( Sentry.instance.testServer ) {
+                        Sentry.instance.testServer = false;
+                        player.sendMessage(chatColor("&a Test-Server is &cDisabled"));
+                    } else {
+                        Sentry.instance.testServer = true;
+                        player.sendMessage(chatColor("&a Test-Server is Enabled"));
+                    }
                 }
             }
             else if ( args.length == 2 )
@@ -87,13 +120,29 @@ public class SentryCommand implements CommandExecutor {
                     }
 
                     PlayerData data = Sentry.instance.dataManager.getPlayerData(target);
-                    if ( data == null || data.ping == Long.MAX_VALUE ) {
+                    new PlayerDataUtil(target).runTransactionPingCheck();
+                    if ( data == null ) {
                         player.sendMessage(chatColor("&cSorry, couldn't get the ping."));
                         return false;
                     }
-                    long diff = System.currentTimeMillis() - data.lastInKeepAlive;
+                    long diffK = System.currentTimeMillis() - data.lastInKeepAlive;
+                    long diffT = System.currentTimeMillis() - data.transactionReceived;
 
-                    player.sendMessage(chatColor("&a" + target.getName() + "'s ping is " + data.ping + "ms. (last checked: " + diff + "ms ago)"  ));
+                    // player.sendMessage(chatColor("&a" + target.getName() + "'s ping is " + data.ping + "ms. (last checked: " + diff + "ms ago)"  ));
+
+                    String temp = "&6&m----------------------------------------------------&r\n"
+                            + " \n"
+                            + "&6&l PING OF &r&6" + target.getName() + "&l!\n"
+                            + " \n"
+                            + "&6 PING METHOD:\n"
+                            + "&6 | KEEP ALIVE: " + ( data.ping != Long.MAX_VALUE ? data.ping + "ms. (last checked: " + diffK + "ms ago)" : "&cNever Checked, retry later!&r" ) + "\n"
+                            + "&6 | TRANSACTION: " + ( data.transactionPing != Long.MAX_VALUE ? data.transactionPing + "ms. (last checked: " + diffT + "ms ago)" : "&cNever Checked, retry later!&r" ) + "\n"
+                            + " \n"
+                            + "&6* We have two ping methods for when player spoofing ping, If they are legit, mostly both will be really near values.\n"
+                            + " \n"
+                            + "&6&m----------------------------------------------------";
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',temp));
+
                 } else if ( args[0].equalsIgnoreCase("info") ) {
 
 

@@ -6,6 +6,7 @@ import com.mogukun.sentry.check.CheckInfo;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
+import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 
 @CheckInfo(
@@ -16,11 +17,19 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 public class BadPacketD extends Check {
 
     @Override
-    public void handle(Packet packet) {
-        if ( packet instanceof PacketPlayInUseEntity ) {
-            PacketPlayInUseEntity packetUseEntity = (PacketPlayInUseEntity) packet;
+    public void handle(Packet thePacket) {
+        if ( thePacket instanceof PacketPlayInUseEntity ) {
+            PacketPlayInUseEntity packet = (PacketPlayInUseEntity) thePacket;
+
             CraftPlayer p = (CraftPlayer) player;
-            if (packetUseEntity.a(p.getHandle().getWorld()) == null) flag();
+            if (packet.a(p.getHandle().getWorld()) == null) flag();
+
+
+
+        }
+        if ( thePacket instanceof PacketPlayOutNamedEntitySpawn ) {
+            PacketPlayOutNamedEntitySpawn packet = (PacketPlayOutNamedEntitySpawn) thePacket;
+
         }
     }
 

@@ -25,6 +25,8 @@ public final class Sentry extends JavaPlugin {
     public static Sentry instance;
     public ServerTPS tps;
 
+    public boolean testServer = false;
+
     public HashMap<UUID,Integer> alertStatus = new HashMap<>();
 
     @Override

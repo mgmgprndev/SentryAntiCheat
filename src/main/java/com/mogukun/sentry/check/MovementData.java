@@ -1,19 +1,24 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
+import com.mogukun.sentry.models.CollidingData;
+import com.mogukun.sentry.models.CollidingType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MovementData {
 
+    public ArrayList<CollidingData> collidingData = new ArrayList<>();
     public ArrayList<Block> colliding = new ArrayList<>();
     public ArrayList<Block> standing = new ArrayList<>();
 
@@ -119,10 +124,14 @@ public class MovementData {
             if (block.getType().toString().contains("SLIME") && onBlock) {
                 isOnSlime = true;
             }
+
+            if(onBlock) collidingData.add( new CollidingData(block.getType().toString(), CollidingType.Standing) );
         }
 
         for ( Block block : hittingHead ) {
-            if ( block.getType() != Material.AIR && block.getType().isSolid() ) isHittingHead = true;
+            boolean yep =  block.getType() != Material.AIR && ( block.getType().isSolid() || (block.getType().isBlock() && !block.isLiquid()) );
+            if ( yep ) isHittingHead = true;
+            if ( yep ) collidingData.add( new CollidingData(block.getType().toString(), CollidingType.Above) );
         }
 
         for ( Block block : colliding ) {
@@ -131,6 +140,7 @@ public class MovementData {
                     block.getY() == playerLoc.getBlockY() + 1;
             if( isOnSameHeight ) {
                 if ( block.getType() != Material.AIR && block.getType().isSolid() ) hasHorizontallyColliding = true;
+                collidingData.add( new CollidingData(block.getType().toString(), CollidingType.Horizontally) );
             }
 
             if( block.getType() == Material.LADDER || block.getType() == Material.VINE ) {
@@ -144,6 +154,8 @@ public class MovementData {
             if ( block.getType().toString().contains("STAIR") || block.getType().toString().contains("SLAB") ){
                 isOnStair = true;
             }
+
+            collidingData.add( new CollidingData(block.getType().toString(), CollidingType.Colliding) );
 
         }
 
@@ -283,24 +295,27 @@ public class MovementData {
     }
 
     public ArrayList<Entity> getCollidingEntities(Location playerLocation) {
-        ArrayList<Entity> entities;
+        List<Entity> entities;
 
         synchronized (playerLocation.getWorld()) {
-            entities = new ArrayList<>(playerLocation.getWorld().getEntities());
+            entities = new ArrayList<>(playerLocation.getWorld().getEntities()); // Shallow copy
         }
 
         ArrayList<Entity> temp = new ArrayList<>();
 
         for (Entity e : entities) {
-            Location el = e.getLocation().clone();
-            double dist = el.distance(playerLocation);
-            if (dist < 1.6 && e.getUniqueId() != player.getUniqueId()) {
-                temp.add(e);
+            synchronized (e) { // Synchronize on each entity
+                Location el = e.getLocation().clone();
+                double dist = el.distance(playerLocation);
+                if (dist < 1.6 && !e.getUniqueId().equals(player.getUniqueId())) {
+                    temp.add(e);
+                }
             }
         }
 
         return temp;
     }
+
 
     private ArrayList<Block> getCollidingBlock(Location playerLocation) {
         ArrayList<Block> collidingBlocks = new ArrayList<>();
@@ -404,6 +419,13 @@ public class MovementData {
         );
 
         return isColliding && distance <= 1.14;
+    }
+
+    public boolean isCollidingTo(String s, CollidingType t) {
+        for ( CollidingData d : collidingData ) {
+            if ( d.name.toLowerCase().contains(s.toLowerCase()) && d.type == t ) return true;
+        }
+        return false;
     }
 
 }

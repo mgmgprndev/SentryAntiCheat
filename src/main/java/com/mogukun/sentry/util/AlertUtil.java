@@ -53,11 +53,26 @@ public class AlertUtil {
                 "/tp " + player.getName() ));
 
         for (Player op : Bukkit.getOnlinePlayers()) {
+
+            UUID uid = op.getUniqueId();
+
+            boolean send = false;
+
             if ( op.hasPermission("sentry.flag") ) {
-                UUID uid = op.getUniqueId();
                 Sentry.instance.alertStatus.putIfAbsent(uid, 0);
-                if ( Sentry.instance.alertStatus.get(uid) != 0 ) op.spigot().sendMessage(tc);
+                if ( Sentry.instance.alertStatus.get(uid) == 1 ) send = true;
             }
+            if ( op.hasPermission("sentry.debug" ) ) {
+
+                Sentry.instance.alertStatus.putIfAbsent(uid, 0);
+                if ( Sentry.instance.alertStatus.get(uid) == 2 &&  uid == player.getUniqueId() ) send = true;
+
+            }
+            if ( Sentry.instance.testServer ) {
+                if ( uid == player.getUniqueId() ) send = true;
+            }
+
+            if ( send ) op.spigot().sendMessage(tc);
         }
     }
 

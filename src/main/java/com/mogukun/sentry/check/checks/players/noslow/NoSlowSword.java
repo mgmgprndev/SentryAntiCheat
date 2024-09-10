@@ -58,6 +58,10 @@ public class NoSlowSword extends Check {
 
 
         if ( thePacket instanceof PacketPlayInFlying) {
+            if ( !isHandHoldSword() ) {
+                isBlocking = false;
+            }
+
             if ( isSprinting && isBlocking ) {
                 if ( counter.count() > 5 ) flag();
             }

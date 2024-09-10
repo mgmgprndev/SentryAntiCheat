@@ -34,8 +34,10 @@ public class TimerA extends Check {
 
         long delta = now - lastPacket;
 
+
+
         balance += delta;
-        balance -= 50;
+        balance -= decrease();
 
         if ( Math.abs(balance) > 200 ) {
             flag("delta=" + delta + " balance=" + balance);
@@ -48,11 +50,18 @@ public class TimerA extends Check {
     @Override
     public void event(Event event) {
         if ( event instanceof PlayerTeleportEvent ) {
-            balance -= 50;
+            balance -= decrease();
         }
         if ( event instanceof PlayerJoinEvent) {
             startIgnore = System.currentTimeMillis();
         }
     }
 
+    private double decrease(){
+        double decrease = 50;
+        if ( !Sentry.instance.tps.lagging ) {
+            decrease = Math.abs((1000/Sentry.instance.tps.getTps()) / 10) * 10;
+        }
+        return decrease;
+    }
 }

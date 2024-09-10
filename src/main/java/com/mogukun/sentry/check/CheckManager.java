@@ -9,10 +9,7 @@ import com.mogukun.sentry.check.checks.combats.blockhit.BlockHitA;
 import com.mogukun.sentry.check.checks.combats.reach.ReachA;
 import com.mogukun.sentry.check.checks.movements.fly.*;
 import com.mogukun.sentry.check.checks.movements.motion.MotionA;
-import com.mogukun.sentry.check.checks.movements.speed.SpeedA;
-import com.mogukun.sentry.check.checks.movements.speed.SpeedB;
-import com.mogukun.sentry.check.checks.movements.speed.SpeedC;
-import com.mogukun.sentry.check.checks.movements.speed.SpeedD;
+import com.mogukun.sentry.check.checks.movements.speed.*;
 import com.mogukun.sentry.check.checks.movements.wallclimb.WallClimbA;
 import com.mogukun.sentry.check.checks.movements.waterwalk.WaterWalkA;
 import com.mogukun.sentry.check.checks.players.badpackets.*;
@@ -24,10 +21,8 @@ import com.mogukun.sentry.check.checks.players.noslow.NoSlowFood;
 import com.mogukun.sentry.check.checks.players.noslow.NoSlowSword;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
 import com.mogukun.sentry.check.checks.players.timer.TimerB;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
-import net.minecraft.server.v1_8_R3.PacketPlayInKeepAlive;
-import net.minecraft.server.v1_8_R3.PacketPlayOutKeepAlive;
+import com.mogukun.sentry.check.checks.players.timer.TimerC;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -35,11 +30,12 @@ import org.bukkit.event.Event;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class CheckManager {
 
 
-    public ArrayList<ViolationData> vl = new ArrayList<>();
+    public ConcurrentLinkedDeque<ViolationData> vl = new ConcurrentLinkedDeque<>();
 
     ArrayList<Check> checks = new ArrayList<>();
 
@@ -65,6 +61,9 @@ public class CheckManager {
         checks.add( new SpeedB() );
         checks.add( new SpeedC() );
         checks.add( new SpeedD() );
+        checks.add( new SpeedE() );
+        checks.add( new SpeedF() );
+
 
         checks.add( new MotionA() );
 
@@ -76,8 +75,10 @@ public class CheckManager {
         checks.add( new GroundSpoofB() );
         checks.add( new GroundSpoofC() );
 
-        checks.add( new TimerA() );
-        checks.add( new TimerB() );
+        // A,B WILL BE DELETED FOR : TOO MANY FALSES, USELESS
+        // checks.add( new TimerA() );
+        // checks.add( new TimerB() );
+        checks.add( new TimerC() );
 
         checks.add( new BadPacketA() );
         checks.add( new BadPacketB() );
@@ -98,10 +99,8 @@ public class CheckManager {
 
         if ( checkMap.get(uuid) == null ) {
             ArrayList<Check> tempCheck = new ArrayList<>();
-            for ( Check t : (ArrayList<Check>) checks.clone() ) {
-                tempCheck.add(t.setPlayer(player));
-                Sentry.instance.getServer()
-                        .getPluginManager().registerEvents( t , Sentry.instance );
+            for ( Check t : new ArrayList<>(checks) ) {
+                tempCheck.add(t.clone().setPlayer(player));
             }
             checkMap.put(uuid, tempCheck);
         }
@@ -110,6 +109,11 @@ public class CheckManager {
     }
 
     public void runCheck(Player player, Packet packet) {
+
+        if ( packet instanceof PacketPlayInTransaction ) {
+            new PlayerDataUtil(player).onTransaction();
+            Sentry.instance.dataManager.getPlayerData(player).transactionReceived = System.currentTimeMillis();
+        }
 
         if ( packet instanceof PacketPlayOutKeepAlive ) {
             Sentry.instance.dataManager.getPlayerData(player).lastOutKeepAlive = System.currentTimeMillis();

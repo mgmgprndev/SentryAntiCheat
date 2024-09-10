@@ -5,6 +5,7 @@ import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
         name = "Speed (B)",
+        path = "movement.speed.b",
         description = "Predication Speed Check",
         category = Category.MOVEMENT
 )

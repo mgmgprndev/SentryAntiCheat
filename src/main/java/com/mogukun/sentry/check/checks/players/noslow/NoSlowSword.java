@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 @CheckInfo(
         name = "NoSlow (Sword)",
+        path = "player.noslow.sword",
         description = "Blocking with Sword while sprinting",
         category = Category.PLAYER
 )

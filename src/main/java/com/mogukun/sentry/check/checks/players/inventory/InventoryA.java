@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 @CheckInfo(
         name = "Inventory (A)",
+        path = "player.inventory.a",
         description = "Moving While Inventory Actions",
         category = Category.PLAYER
 )

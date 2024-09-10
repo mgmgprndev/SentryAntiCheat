@@ -7,6 +7,7 @@ import com.mogukun.sentry.check.MovementData;
 
 @CheckInfo(
         name = "Fly (D)",
+        path = "movement.fly.d",
         description = "Predication Check",
         category = Category.MOVEMENT
 )

@@ -8,6 +8,7 @@ import net.minecraft.server.v1_8_R3.*;
 
 @CheckInfo(
         name = "BlockHit (A)",
+        path = "combat.blockhit.a",
         description = "Block Hit",
         category = Category.COMBAT
 )

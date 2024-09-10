@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 @CheckInfo(
         name = "NoSlow (Food)",
+        path = "player.noslow.food",
         description = "Eating something while sprinting",
         category = Category.PLAYER
 )

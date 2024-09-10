@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 @CheckInfo(
         name = "Timer (B)",
+        path = "player.timer.b",
         description = "Advanced Timer Check",
         category = Category.PLAYER
 )

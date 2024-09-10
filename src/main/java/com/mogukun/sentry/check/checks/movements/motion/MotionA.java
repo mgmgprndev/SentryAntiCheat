@@ -5,6 +5,7 @@ import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
         name = "Motion (A)",
+        path = "movement.motion.a",
         description = "Impossible Movement",
         category = Category.MOVEMENT
 )

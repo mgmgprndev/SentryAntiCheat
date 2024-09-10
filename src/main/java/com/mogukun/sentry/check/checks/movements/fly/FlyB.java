@@ -4,6 +4,7 @@ import com.mogukun.sentry.check.*;
 
 @CheckInfo(
         name = "Fly (B)",
+        path = "movement.fly.b",
         description = "Simple Flight Check",
         category = Category.MOVEMENT
 )

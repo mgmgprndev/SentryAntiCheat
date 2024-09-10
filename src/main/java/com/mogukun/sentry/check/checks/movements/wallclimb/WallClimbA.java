@@ -1,16 +1,19 @@
 package com.mogukun.sentry.check.checks.movements.wallclimb;
 
 import com.mogukun.sentry.check.*;
+import com.mogukun.sentry.models.Counter;
 import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
         name = "WallClimb (A)",
+        path = "movement.wallclimb.a",
         description = "Simple WallClimb Check",
         category = Category.MOVEMENT
 )
 public class WallClimbA extends Check {
 
-    int buffer = 0;
+
+    Counter counter = new Counter();
 
     @Override
     public void handle(MovementData data)
@@ -21,13 +24,13 @@ public class WallClimbA extends Check {
         if ( data.sinceClimbTick < 15 ) return;
 
         if ( data.currentY > data.lastY ||
-                ( data.currentDeltaY == data.lastDeltaY && data.currentDeltaY != 0.0 )  ) {
-            if ( buffer++ > 6 ) {
-                flag();
-                buffer = 0;
+                ( data.currentDeltaY == data.lastDeltaY && data.currentDeltaY > 0.5 )  ) {
+            if ( counter.count() > 12 ) {
+                flag("count="+counter.getCount());
             }
+
         } else {
-            buffer -= buffer > 0 ? 1 : 0;
+            counter.decrease();
         }
     }
 

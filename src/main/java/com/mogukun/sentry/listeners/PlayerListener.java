@@ -68,6 +68,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onClickInv(InventoryClickEvent event) {
         call((Player) event.getWhoClicked(), event);
+        Sentry.instance.guiManager.callEvent(event);
     }
 
     @EventHandler

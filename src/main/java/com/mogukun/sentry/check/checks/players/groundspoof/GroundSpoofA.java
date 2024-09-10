@@ -4,6 +4,7 @@ import com.mogukun.sentry.check.*;
 
 @CheckInfo(
         name = "GroundSpoof (A)",
+        path = "player.groundspoof.a",
         description = "Simple Ground Spoof Check",
         category = Category.PLAYER
 )
@@ -18,6 +19,7 @@ public class GroundSpoofA extends Check {
     public void handle(MovementData data)
     {
 
+        if ( isBypass() ) return;
         if ( data.sinceStandingOnBoatTick <= 2 ) return;
         if ( data.sinceVehicleTick <= 2 ) return;
         if ( data.sinceClimbTick < 15 ) return;

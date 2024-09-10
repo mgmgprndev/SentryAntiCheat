@@ -7,6 +7,7 @@ import com.mogukun.sentry.check.MovementData;
 
 @CheckInfo(
         name = "Speed (F)",
+        path = "movement.speed.f",
         description = "Minecraft Traffic Law Enforcement (v.2)",
         category = Category.MOVEMENT
 )

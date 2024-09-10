@@ -7,6 +7,7 @@ import net.minecraft.server.v1_8_R3.*;
 
 @CheckInfo(
         name = "BadPacket (F)",
+        path = "player.badpacket.f",
         description = "Ping Spoof",
         category = Category.PLAYER
 )

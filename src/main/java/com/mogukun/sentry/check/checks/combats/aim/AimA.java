@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @CheckInfo(
         name = "Aim (A)",
+        path = "combat.aim.a",
         description = "",
         category = Category.COMBAT
 )

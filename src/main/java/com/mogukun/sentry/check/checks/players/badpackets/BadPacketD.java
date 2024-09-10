@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 
 @CheckInfo(
         name = "BadPacket (D)",
+        path = "player.badpacket.d",
         description = "Invalid Entity Attack",
         category = Category.PLAYER
 )

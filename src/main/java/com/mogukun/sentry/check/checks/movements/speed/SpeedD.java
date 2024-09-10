@@ -5,6 +5,7 @@ import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
         name = "Speed (D)",
+        path = "movement.speed.d",
         description = "Unusual XZ Speed Detection",
         category = Category.MOVEMENT
 )

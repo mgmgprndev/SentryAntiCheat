@@ -7,6 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
         name = "Speed (E)",
+        path = "movement.speed.e",
         description = "Minecraft Traffic Law Enforcement (v.1)",
         category = Category.MOVEMENT
 )

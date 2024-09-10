@@ -3,12 +3,15 @@ package com.mogukun.sentry.commands;
 import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.PlayerData;
 import com.mogukun.sentry.check.PlayerDataUtil;
+import com.mogukun.sentry.gui.guis.MainMenu;
+import com.mogukun.sentry.util.CheckUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
 
@@ -32,7 +35,7 @@ public class SentryCommand implements CommandExecutor {
             Player player = ((Player) sender).getPlayer();
 
 
-            if ( !player.hasPermission("sentry.command") ) {
+            if ( !player.hasPermission("sentry.admin") ) {
                 player.sendMessage(chatColor("&c You are not allowed to run this command!"));
                 return false;
             }
@@ -45,6 +48,7 @@ public class SentryCommand implements CommandExecutor {
                         + "&6&l SentryAntiCheat " + Sentry.instance.getDescription().getVersion() + "\n"
                         + " \n"
                         + "&6 /sentry - show information\n"
+                        + "&6 /sentry reload - reload config\n"
                         + "&6 /sentry alerts - enable alert\n"
                         + "&6 /sentry ping <player> - get ping of player\n"
                         + "&6 /sentry info <player> - get info from ip-api.com\n"
@@ -107,6 +111,16 @@ public class SentryCommand implements CommandExecutor {
                         Sentry.instance.testServer = true;
                         player.sendMessage(chatColor("&a Test-Server is Enabled"));
                     }
+                }
+                else if ( args[0].toLowerCase().startsWith("reload") ) {
+                    player.sendMessage(chatColor("&a Reloading Config..."));
+                    Sentry.instance.reloadConfig();
+                    Sentry.instance.config = Sentry.instance.getConfig();
+                    Sentry.instance.checkUtil = new CheckUtil();
+                    player.sendMessage(chatColor("&a Reloaded Config!"));
+                }
+                else if ( args[0].toLowerCase().startsWith("gui") ) {
+                    player.openInventory( new MainMenu().createGUI(player) );
                 }
             }
             else if ( args.length == 2 )

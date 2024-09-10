@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @CheckInfo(
-        name = "Aura (A)",
+        name = "KillAura (A)",
+        path = "combat.killaura.a",
         description = "Multi Aura Detection",
         category = Category.COMBAT
 )

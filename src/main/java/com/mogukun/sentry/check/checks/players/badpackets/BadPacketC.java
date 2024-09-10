@@ -6,6 +6,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 @CheckInfo(
         name = "BadPacket (C)",
+        path = "player.badpacket.c",
         description = "Invalid Flying Y Position Packet",
         category = Category.PLAYER
 )

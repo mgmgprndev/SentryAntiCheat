@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 @CheckInfo(
         name = "BadPacket (A)",
+        path = "player.badpacket.a",
         description = "Invalid Flying Packet Check",
         category = Category.PLAYER
 )

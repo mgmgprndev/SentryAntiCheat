@@ -7,6 +7,7 @@ import com.mogukun.sentry.check.MovementData;
 
 @CheckInfo(
         name = "GroundSpoof (B)",
+        path = "player.groundspoof.b",
         description = "Ground Spoof Check",
         category = Category.PLAYER
 )

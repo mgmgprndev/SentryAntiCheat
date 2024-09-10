@@ -37,7 +37,7 @@ public class CheckManager {
 
     public ConcurrentLinkedDeque<ViolationData> vl = new ConcurrentLinkedDeque<>();
 
-    ArrayList<Check> checks = new ArrayList<>();
+    public ArrayList<Check> checks = new ArrayList<>();
 
     public CheckManager(){
 

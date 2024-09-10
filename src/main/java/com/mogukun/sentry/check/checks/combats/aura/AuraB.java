@@ -8,7 +8,8 @@ import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
 import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
 
 @CheckInfo(
-        name = "Aura (B)",
+        name = "KillAura (B)",
+        path = "combat.killaura.b",
         description = "Badly Coded KillAura detection",
         category = Category.COMBAT
 )

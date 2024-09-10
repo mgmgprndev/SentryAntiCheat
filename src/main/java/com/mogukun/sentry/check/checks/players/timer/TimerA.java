@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 @CheckInfo(
         name = "Timer (A)",
+        path = "player.timer.a",
         description = "Timer Check",
         category = Category.PLAYER
 )

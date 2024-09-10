@@ -8,6 +8,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 
 @CheckInfo(
         name = "BadPacket (E)",
+        path = "player.badpacket.e",
         description = "Rotating Without Rotating",
         category = Category.PLAYER
 )

@@ -9,6 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface CheckInfo {
 
     String name();
+    String path();
     String description();
     Category category();
     boolean experimental() default false;

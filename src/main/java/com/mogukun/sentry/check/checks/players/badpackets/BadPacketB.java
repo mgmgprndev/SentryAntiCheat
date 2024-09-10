@@ -9,6 +9,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayInSteerVehicle;
 
 @CheckInfo(
         name = "BadPacket (B)",
+        path = "player.badpacket.b",
         description = "Invalid Rotating Packet",
         category = Category.PLAYER
 )

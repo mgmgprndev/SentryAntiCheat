@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 @CheckInfo(
         name = "AutoClicker (A)",
+        path = "combat.autoclicker.a",
         description = "Simple AutoClicker Check",
         category = Category.COMBAT
 )

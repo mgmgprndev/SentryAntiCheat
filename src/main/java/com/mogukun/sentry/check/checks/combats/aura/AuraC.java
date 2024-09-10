@@ -8,7 +8,8 @@ import net.minecraft.server.v1_8_R3.PacketPlayInArmAnimation;
 import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
 
 @CheckInfo(
-        name = "Aura (C)",
+        name = "KillAura (C)",
+        path = "combat.killaura.c",
         description = "No Swing KillAura Detection",
         category = Category.COMBAT
 )

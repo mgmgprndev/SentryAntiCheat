@@ -8,6 +8,7 @@ import com.mogukun.sentry.models.Counter;
 
 @CheckInfo(
         name = "Fly (E)",
+        path = "movement.fly.e",
         description = "Unusual DeltaY Detection",
         category = Category.MOVEMENT
 )

@@ -4,6 +4,7 @@ import com.mogukun.sentry.check.*;
 
 @CheckInfo(
         name = "Speed (C)",
+        path = "movement.speed.c",
         description = "Horizontal Speed",
         category = Category.MOVEMENT
 )

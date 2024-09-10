@@ -16,7 +16,8 @@ import java.util.Collections;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @CheckInfo(
-        name = "Timer (NEW)",
+        name = "Timer (C)",
+        path = "player.timer.c",
         description = "Totally Collecting Delay Timer Check",
         category = Category.PLAYER
 )

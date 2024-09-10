@@ -7,6 +7,7 @@ import com.mogukun.sentry.check.MovementData;
 
 @CheckInfo(
         name = "Fly (C)",
+        path = "movement.fly.c",
         description = "Incorrect Air Vertical Motion",
         category = Category.MOVEMENT
 )

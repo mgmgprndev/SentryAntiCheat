@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
         name = "WaterWalk (A)",
+        path = "movement.waterwalk.a",
         description = "Do not walk on water, jesus!",
         category = Category.MOVEMENT
 )

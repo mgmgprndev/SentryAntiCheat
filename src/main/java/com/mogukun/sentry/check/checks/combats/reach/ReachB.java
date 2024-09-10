@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 @CheckInfo(
         name = "Reach (A)",
+        path = "combat.reach.b",
         description = "A Shit Reach Check",
         category = Category.COMBAT
 )

@@ -18,6 +18,8 @@ public class AlertUtil {
 
     public AlertUtil(Player player, CheckInfo checkInfo, String debug) {
 
+        if ( !Sentry.instance.checkUtil.isEnabled(checkInfo.path()) ) return;
+
         UUID uuid = player.getUniqueId();
 
         Sentry.instance.checkManager.vl.add( new ViolationData( uuid, checkInfo.name() ));
@@ -58,16 +60,14 @@ public class AlertUtil {
 
             boolean send = false;
 
-            if ( op.hasPermission("sentry.flag") ) {
-                Sentry.instance.alertStatus.putIfAbsent(uid, 0);
+            Sentry.instance.alertStatus.putIfAbsent(uid, 0);
+
+            if ( op.hasPermission("sentry.admin") ) {
                 if ( Sentry.instance.alertStatus.get(uid) == 1 ) send = true;
             }
-            if ( op.hasPermission("sentry.debug" ) ) {
 
-                Sentry.instance.alertStatus.putIfAbsent(uid, 0);
-                if ( Sentry.instance.alertStatus.get(uid) == 2 &&  uid == player.getUniqueId() ) send = true;
+            if ( Sentry.instance.alertStatus.get(uid) == 2 &&  uid == player.getUniqueId() ) send = true;
 
-            }
             if ( Sentry.instance.testServer ) {
                 if ( uid == player.getUniqueId() ) send = true;
             }

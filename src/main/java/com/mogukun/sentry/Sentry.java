@@ -48,6 +48,7 @@ public final class Sentry extends JavaPlugin {
         getServer().getPluginManager().registerEvents( new PlayerListener(), this );
         getCommand("sentry").setExecutor( new SentryCommand() );
         for ( Player p : Bukkit.getOnlinePlayers() ) Sentry.instance.checkManager.checkMap.remove(p.getUniqueId());
+
         System.out.println("[Sentry] Loaded Sentry AntiCheat in " + ( System.currentTimeMillis() - startLoading ) + "ms.");
     }
 }

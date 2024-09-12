@@ -162,8 +162,10 @@ public class CheckManager {
 
             for ( Check check : init(player) )
             {
-                check.handle(packet);
-                if ( data != null ) check.handle(data);
+                try {
+                    check.handle(packet);
+                    if ( data != null ) check.handle(data);
+                } catch (Exception ignore) {}
             }
         }).start();
     }

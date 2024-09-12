@@ -13,6 +13,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 @CheckInfo(
         name = "AutoClicker (B)",
@@ -27,7 +28,7 @@ public class AutoClickerB extends Check {
     long lastArm = 0;
     long lastPlace = 0;
 
-    ArrayList<DeltaSample> samples = new ArrayList<>();
+    ConcurrentLinkedDeque<DeltaSample> samples = new ConcurrentLinkedDeque<>();
     int buffer = 0;
 
 

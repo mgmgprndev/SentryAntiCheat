@@ -1,7 +1,7 @@
 package com.mogukun.sentry.check.checks.movements.motion;
 
 import com.mogukun.sentry.check.*;
-import org.bukkit.potion.PotionEffectType;
+import com.mogukun.sentry.models.MovementData;
 
 @CheckInfo(
         name = "Motion (A)",

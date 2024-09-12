@@ -3,10 +3,8 @@ package com.mogukun.sentry.check.checks.combats.autoclicker;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.check.MovementData;
 import com.mogukun.sentry.models.DeltaSample;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 

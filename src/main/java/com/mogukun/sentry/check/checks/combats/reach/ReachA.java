@@ -3,7 +3,7 @@ package com.mogukun.sentry.check.checks.combats.reach;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.check.MovementData;
+import com.mogukun.sentry.models.MovementData;
 import com.mogukun.sentry.models.LocationTimeStamp;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -32,23 +32,21 @@ public class ReachA extends Check {
         Location playerLocation = player.getLocation().clone();
         ping = data.ping;
 
+        locationTimeStamps.removeIf(s -> System.currentTimeMillis() - s.timestamp > 1000);
+
         List<Entity> entities;
 
-        synchronized (playerLocation.getWorld()) {
-            entities = new ArrayList<>(playerLocation.getWorld().getEntities()); // Shallow copy
-        }
-
-        for ( Entity ent : entities ) {
-            synchronized (ent) {
+        try {
+            entities = new ArrayList<>(playerLocation.getWorld().getEntities());
+            for ( Entity ent : entities ) {
                 Location  entLocation = ent.getLocation().clone();
                 double dist = entLocation.distance(playerLocation);
                 if ( dist < 10 ) {
                     locationTimeStamps.add(new LocationTimeStamp(ent.getUniqueId(), entLocation));
                 }
             }
-        }
+        } catch (Exception ignore) {}
 
-        locationTimeStamps.removeIf(s -> System.currentTimeMillis() - s.timestamp > 1000);
     }
 
     @Override

@@ -3,15 +3,8 @@ package com.mogukun.sentry.check.checks.players.noslow;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.check.MovementData;
 import com.mogukun.sentry.models.Counter;
 import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Material;
-import org.bukkit.event.Event;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 @CheckInfo(
         name = "NoSlow (Sword)",

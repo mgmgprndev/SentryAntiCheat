@@ -1,8 +1,9 @@
-package com.mogukun.sentry.util;
+package com.mogukun.sentry.utils;
 
 import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.check.ViolationData;
+import com.mogukun.sentry.events.SentryFlagEvent;
+import com.mogukun.sentry.models.ViolationData;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -13,16 +14,16 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class AlertUtil {
+public class FlagUtil {
 
 
-    public AlertUtil(Player player, CheckInfo checkInfo, String debug) {
+    public FlagUtil(Player player, CheckInfo checkInfo, String debug) {
 
         if ( !Sentry.instance.checkUtil.isEnabled(checkInfo.path()) ) return;
 
         UUID uuid = player.getUniqueId();
 
-        Sentry.instance.checkManager.vl.add( new ViolationData( uuid, checkInfo.name() ));
+        Sentry.instance.checkManager.vl.add( new ViolationData( uuid, checkInfo.name() ) );
 
         int total = 0;
         int perCheck = 0;
@@ -74,6 +75,8 @@ public class AlertUtil {
 
             if ( send ) op.spigot().sendMessage(tc);
         }
+
+        Bukkit.getPluginManager().callEvent(new SentryFlagEvent(checkInfo, total, perCheck, player, debug));
     }
 
 

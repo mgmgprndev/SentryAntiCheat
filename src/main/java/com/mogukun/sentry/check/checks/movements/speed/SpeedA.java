@@ -1,7 +1,8 @@
 package com.mogukun.sentry.check.checks.movements.speed;
 
-import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.*;
+import com.mogukun.sentry.models.MovementData;
+import com.mogukun.sentry.utils.PlayerDataUtil;
 import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(

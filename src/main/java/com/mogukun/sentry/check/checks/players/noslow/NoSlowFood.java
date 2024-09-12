@@ -3,7 +3,7 @@ package com.mogukun.sentry.check.checks.players.noslow;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.check.MovementData;
+import com.mogukun.sentry.models.MovementData;
 import com.mogukun.sentry.models.Counter;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;

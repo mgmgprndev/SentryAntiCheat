@@ -2,7 +2,7 @@ package com.mogukun.sentry.check.checks.movements.waterwalk;
 
 import com.mogukun.sentry.check.*;
 import com.mogukun.sentry.models.Counter;
-import org.bukkit.potion.PotionEffectType;
+import com.mogukun.sentry.models.MovementData;
 
 @CheckInfo(
         name = "WaterWalk (A)",

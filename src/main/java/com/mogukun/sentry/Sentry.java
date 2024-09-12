@@ -1,25 +1,19 @@
 package com.mogukun.sentry;
 
 import com.mogukun.sentry.check.CheckManager;
-import com.mogukun.sentry.check.PlayerDataManager;
+import com.mogukun.sentry.managers.PlayerDataManager;
 import com.mogukun.sentry.commands.SentryCommand;
 import com.mogukun.sentry.gui.GUIManager;
-import com.mogukun.sentry.listeners.PacketHandler;
 import com.mogukun.sentry.listeners.PlayerListener;
-import com.mogukun.sentry.models.ServerTPS;
-import com.mogukun.sentry.util.CheckUtil;
-import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
+import com.mogukun.sentry.managers.ServerTPS;
+import com.mogukun.sentry.utils.CheckUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.Executors;
 
 public final class Sentry extends JavaPlugin {
 

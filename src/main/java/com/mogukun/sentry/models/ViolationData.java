@@ -1,4 +1,4 @@
-package com.mogukun.sentry.check;
+package com.mogukun.sentry.models;
 
 import java.util.UUID;
 

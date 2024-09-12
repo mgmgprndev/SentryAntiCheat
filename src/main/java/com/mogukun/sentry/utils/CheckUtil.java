@@ -1,4 +1,4 @@
-package com.mogukun.sentry.util;
+package com.mogukun.sentry.utils;
 
 import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.check.Check;

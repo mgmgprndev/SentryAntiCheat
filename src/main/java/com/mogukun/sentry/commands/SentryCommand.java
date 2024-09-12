@@ -1,18 +1,16 @@
 package com.mogukun.sentry.commands;
 
 import com.mogukun.sentry.Sentry;
-import com.mogukun.sentry.check.PlayerData;
-import com.mogukun.sentry.check.PlayerDataUtil;
+import com.mogukun.sentry.models.PlayerData;
+import com.mogukun.sentry.utils.PlayerDataUtil;
 import com.mogukun.sentry.gui.guis.MainMenu;
-import com.mogukun.sentry.util.CheckUtil;
+import com.mogukun.sentry.utils.CheckUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -50,6 +48,8 @@ public class SentryCommand implements CommandExecutor {
                         + "&6 /sentry - show information\n"
                         + "&6 /sentry reload - reload config\n"
                         + "&6 /sentry alerts - enable alert\n"
+                        + "&6 /sentry gui - Sentry GUI Interface\n"
+                        + "&6 /sentry tps - Show Server TPS\n"
                         + "&6 /sentry ping <player> - get ping of player\n"
                         + "&6 /sentry info <player> - get info from ip-api.com\n"
                         + " \n"
@@ -121,6 +121,17 @@ public class SentryCommand implements CommandExecutor {
                 }
                 else if ( args[0].toLowerCase().startsWith("gui") ) {
                     player.openInventory( new MainMenu().createGUI(player) );
+                }
+                else if ( args[0].toLowerCase().startsWith("tps") ) {
+                    double tps = Sentry.instance.tps.tps;
+                    String color = "";
+                    if ( tps < 19.4 ) {
+                        color = "&e";
+                    }
+                    if ( tps < 15 ) {
+                        color = "&c";
+                    }
+                    player.sendMessage(chatColor("&a TPS: " + color + tps ));
                 }
             }
             else if ( args.length == 2 )

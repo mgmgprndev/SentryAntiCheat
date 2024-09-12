@@ -2,7 +2,7 @@ package com.mogukun.sentry.gui.guis;
 
 import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.gui.GUI;
-import com.mogukun.sentry.util.ListUtil;
+import com.mogukun.sentry.utils.ListUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class MainMenu extends GUI {
 
@@ -29,13 +31,17 @@ public class MainMenu extends GUI {
 
         inv.setItem(11, createStack(Material.BOOK, "&6Checks", new ListUtil().
                 add("&1").
-                add("&6Total " + Sentry.instance.checkManager.checks.size() + " checks" ).
-                add("&6and " + Sentry.instance.checkUtil.enabledCheckSize() + " are enable" )
+                add("&6Total &l" + Sentry.instance.checkManager.checks.size() + "&6 checks" ).
+                add("&6and &l" + Sentry.instance.checkUtil.enabledCheckSize() + "&6 are enable" )
                 .getList()));
+
+        List<String> authors = Sentry.instance.getDescription().getAuthors();
 
         inv.setItem(13, createStack(Material.PAPER, "&6Sentry Information", new ListUtil().
                 add("&1").
-                add("&6Type &fFree").
+                add("&6Author &f" + (authors.size() > 1 ? String.join(", ", authors) : authors.get(0)) ).
+                add("&6Description").
+                add("&f" + Sentry.instance.getDescription().getDescription() ).
                 add("&6Version &f" + Sentry.instance.getDescription().getVersion())
                 .getList()));
 
@@ -43,7 +49,7 @@ public class MainMenu extends GUI {
         inv.setItem(15, createStack(Material.REDSTONE, "&6Reload Config", new ListUtil().
                 add("&1").
                 add("&6You can reload config by clicking").
-                add("&6You can also use /sentry reload instead")
+                add("&6You can also use &l/sentry reload&6 instead")
                 .getList()));
 
         return inv;

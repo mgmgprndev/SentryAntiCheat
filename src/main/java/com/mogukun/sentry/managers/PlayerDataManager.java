@@ -1,5 +1,6 @@
-package com.mogukun.sentry.check;
+package com.mogukun.sentry.managers;
 
+import com.mogukun.sentry.models.PlayerData;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

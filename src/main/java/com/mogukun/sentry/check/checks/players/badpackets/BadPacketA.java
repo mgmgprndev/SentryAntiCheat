@@ -3,12 +3,7 @@ package com.mogukun.sentry.check.checks.players.badpackets;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.check.MovementData;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
-import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import com.mogukun.sentry.models.MovementData;
 
 @CheckInfo(
         name = "BadPacket (A)",

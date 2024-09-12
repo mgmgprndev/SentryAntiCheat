@@ -1,9 +1,8 @@
 package com.mogukun.sentry.gui.guis;
 
 import com.mogukun.sentry.Sentry;
-import com.mogukun.sentry.check.CheckInfo;
 import com.mogukun.sentry.gui.GUI;
-import com.mogukun.sentry.util.ListUtil;
+import com.mogukun.sentry.utils.ListUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;

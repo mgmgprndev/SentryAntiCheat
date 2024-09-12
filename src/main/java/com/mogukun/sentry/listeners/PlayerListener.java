@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -22,7 +24,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        call(event.getPlayer(), event);
 
         CraftPlayer craftPlayer = (CraftPlayer) event.getPlayer();
         EntityPlayer entityPlayer = craftPlayer.getHandle();
@@ -33,10 +34,22 @@ public class PlayerListener implements Listener {
                         pipeline.addBefore("packet_handler", "sentry_packet_handler",
                                 new PacketHandler(event.getPlayer()))
         );
+
+        call(event.getPlayer(), event);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
+        Sentry.instance.checkManager.checkMap.remove(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent event) {
+        Sentry.instance.checkManager.checkMap.remove(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent event) {
         Sentry.instance.checkManager.checkMap.remove(event.getPlayer().getUniqueId());
     }
 
@@ -76,6 +89,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         call(player, event);
         Sentry.instance.dataManager.getPlayerData(player).sinceVelocityTakenTick = 0;
+        Sentry.instance.dataManager.getPlayerData(player).velocityTaken = event.getVelocity();
     }
 
     @EventHandler

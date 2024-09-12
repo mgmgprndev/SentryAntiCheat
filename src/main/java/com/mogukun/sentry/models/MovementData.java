@@ -1,12 +1,9 @@
-package com.mogukun.sentry.check;
+package com.mogukun.sentry.models;
 
 import com.mogukun.sentry.Sentry;
-import com.mogukun.sentry.models.CollidingData;
-import com.mogukun.sentry.models.CollidingType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -96,7 +93,8 @@ public class MovementData {
         standing = getAroundBlock( playerLoc );
         hittingHead = getAboveBlock( new Location(player.getWorld(),x,y + 1 ,z) );
 
-        collidingEntity = getCollidingEntities(playerLoc);
+        ArrayList<Entity> collidingEntityTemp = getCollidingEntities(playerLoc);
+        collidingEntity = collidingEntityTemp == null ? lastMovementData.collidingEntity : collidingEntityTemp;
 
 
         clientGround = ground;
@@ -297,20 +295,26 @@ public class MovementData {
     public ArrayList<Entity> getCollidingEntities(Location playerLocation) {
         List<Entity> entities;
 
-        synchronized (playerLocation.getWorld()) {
+        try {
             entities = new ArrayList<>(playerLocation.getWorld().getEntities()); // Shallow copy
+        } catch (Exception ignore){
+            return null;
         }
 
         ArrayList<Entity> temp = new ArrayList<>();
 
-        for (Entity e : entities) {
-            synchronized (e) { // Synchronize on each entity
-                Location el = e.getLocation().clone();
-                double dist = el.distance(playerLocation);
-                if (dist < 1.6 && !e.getUniqueId().equals(player.getUniqueId())) {
-                    temp.add(e);
-                }
+        try {
+            for (Entity e : entities) {
+                try {
+                    Location el = e.getLocation().clone();
+                    double dist = el.distance(playerLocation);
+                    if (dist < 1.6 && !e.getUniqueId().equals(player.getUniqueId())) {
+                        temp.add(e);
+                    }
+                } catch (Exception ignore) {}
             }
+        } catch (Exception ignore){
+            return temp;
         }
 
         return temp;

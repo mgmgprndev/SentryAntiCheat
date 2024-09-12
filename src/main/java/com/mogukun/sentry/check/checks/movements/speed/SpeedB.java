@@ -1,7 +1,7 @@
 package com.mogukun.sentry.check.checks.movements.speed;
 
 import com.mogukun.sentry.check.*;
-import org.bukkit.potion.PotionEffectType;
+import com.mogukun.sentry.models.MovementData;
 
 @CheckInfo(
         name = "Speed (B)",
@@ -16,7 +16,7 @@ public class SpeedB extends Check {
     @Override
     public void handle(MovementData data)
     {
-        if ( isBypass() || data.sinceVehicleTick <= 5 || data.sinceStandingOnBoatTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
+        if ( isBypass() || data.sinceVelocityTaken < 5 ||  data.sinceVehicleTick <= 5 || data.sinceStandingOnBoatTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
             buffer = 0;
             return;
         }

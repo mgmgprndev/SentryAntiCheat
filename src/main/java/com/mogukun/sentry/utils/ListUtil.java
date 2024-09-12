@@ -1,4 +1,4 @@
-package com.mogukun.sentry.util;
+package com.mogukun.sentry.utils;
 
 import java.util.ArrayList;
 import java.util.List;

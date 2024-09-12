@@ -1,6 +1,7 @@
 package com.mogukun.sentry.check.checks.players.groundspoof;
 
 import com.mogukun.sentry.check.*;
+import com.mogukun.sentry.models.MovementData;
 
 @CheckInfo(
         name = "GroundSpoof (A)",

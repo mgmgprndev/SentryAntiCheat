@@ -3,7 +3,7 @@ package com.mogukun.sentry.check.checks.players.groundspoof;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.check.MovementData;
+import com.mogukun.sentry.models.MovementData;
 
 @CheckInfo(
         name = "GroundSpoof (C)",

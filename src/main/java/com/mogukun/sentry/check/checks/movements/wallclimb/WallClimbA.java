@@ -2,7 +2,7 @@ package com.mogukun.sentry.check.checks.movements.wallclimb;
 
 import com.mogukun.sentry.check.*;
 import com.mogukun.sentry.models.Counter;
-import org.bukkit.potion.PotionEffectType;
+import com.mogukun.sentry.models.MovementData;
 
 @CheckInfo(
         name = "WallClimb (A)",

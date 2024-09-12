@@ -1,19 +1,15 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
-import com.mogukun.sentry.util.AlertUtil;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import com.mogukun.sentry.models.MovementData;
+import com.mogukun.sentry.models.PlayerData;
+import com.mogukun.sentry.utils.FlagUtil;
+import com.mogukun.sentry.utils.PlayerDataUtil;
 import net.minecraft.server.v1_8_R3.Packet;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
-
-import java.util.UUID;
 
 public abstract class Check implements Listener, Cloneable{
 
@@ -41,7 +37,7 @@ public abstract class Check implements Listener, Cloneable{
     }
 
     public void flag(String debug){
-        new AlertUtil(player, checkInfo, debug);
+        new FlagUtil(player, checkInfo, debug);
     }
 
 

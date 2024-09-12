@@ -1,9 +1,9 @@
 package com.mogukun.sentry.check.checks.players.inventory;
 
 import com.mogukun.sentry.check.*;
+import com.mogukun.sentry.models.MovementData;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 @CheckInfo(
@@ -23,7 +23,10 @@ public class InventoryA extends Check {
 
     @Override
     public void handle(MovementData data) {
-        if ( !data.moving ) return;
+        if (!( data.currentDeltaY != 0 && data.lastDeltaY != 0 && data.currentDeltaXZ != 0 && data.lastDeltaXZ != 0 )) {
+            return;
+        }
+
         if ( ignore++ < 5 ) {
             return;
         }
@@ -31,9 +34,7 @@ public class InventoryA extends Check {
 
             if ( failed ) {
 
-                if ( data.moving ) {
-                    flag();
-                }
+                flag();
 
                 failed = false;
             }

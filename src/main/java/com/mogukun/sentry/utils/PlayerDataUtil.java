@@ -1,9 +1,10 @@
-package com.mogukun.sentry.check;
+package com.mogukun.sentry.utils;
 
 import com.mogukun.sentry.Sentry;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTransaction;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -23,8 +24,17 @@ public class PlayerDataUtil {
         return -1;
     }
 
+    public boolean isChunkLoaded(Location location) {
+        return (location.getWorld().isChunkLoaded(location.getBlockX() >> 4, location.getBlockZ() >> 4));
+    }
+
+
     public boolean isBypass() {
         GameMode gm = player.getGameMode();
+
+        if ( !isChunkLoaded(player.getLocation()) ) {
+            return true;
+        }
 
         if ( gm == GameMode.SPECTATOR ) {
             return true;

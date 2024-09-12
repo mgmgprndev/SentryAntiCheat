@@ -1,69 +1,79 @@
 package com.mogukun.sentry.check.checks.movements.speed;
 
-import com.mogukun.sentry.check.*;
+import com.mogukun.sentry.check.Category;
+import com.mogukun.sentry.check.Check;
+import com.mogukun.sentry.check.CheckInfo;
+import com.mogukun.sentry.models.MovementData;
 import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(
         name = "Speed (D)",
         path = "movement.speed.d",
-        description = "Unusual XZ Speed Detection",
+        description = "Minecraft Traffic Law Enforcement",
         category = Category.MOVEMENT
 )
 public class SpeedD extends Check {
 
-    double balance = 0;
-    int speedLevel = -1;
-    int sinceLostSpeedLevel = 0;
+    double lastFriction = 0;
+    double groundY = 0;
+    int bypassTick = 0;
+    int movingTick = 0;
+    int sinceSprinting = 0;
+    double buffer = 0;
 
     @Override
     public void handle(MovementData data)
     {
-        if ( isBypass() || !data.moving || data.sinceVehicleTick <= 5 || data.sinceWaterTick <= 5 || data.teleportTick <= 5 || data.respawnTick <= 5 ) {
-            balance = 0;
+        bypassTick++;
+        movingTick++;
+        sinceSprinting++;
+        if ( player.isSprinting() ) sinceSprinting = 0;
+
+        if ( data.currentX == data.lastX && data.currentZ == data.lastZ ) {
+            movingTick = 0;
+            buffer = 0;
+        }
+
+        if ( movingTick < 5 ) {
+            bypassTick = 0;
+            buffer = 0;
+        }
+
+        if ( data.waterTick > 0 ) bypassTick = 0;
+
+        if ( data.serverGround ) {
+            groundY = data.currentY;
+        }
+
+        if ( Math.abs(groundY - data.currentY) >= 1 ) {
+            bypassTick = 0;
+        }
+
+        if ( bypassTick < 5 ) return;
+        if ( data.clientAirTick > 12 ) return;
+
+
+        double sprintAddition = ( sinceSprinting < 5 ? 0.0263 : 0 );
+        double friction = data.currentDeltaXZ / data.lastDeltaXZ - sprintAddition;
+        if ( lastFriction == 0 ) {
+            lastFriction = friction;
             return;
         }
 
-        balance += data.currentDeltaXZ;
-        balance -= data.lastDeltaXZ;
+        double pred = data.lastDeltaXZ * lastFriction + sprintAddition;
+        int speedAmp = getPlayerUtil().getAmplifier(PotionEffectType.SPEED);
+        if ( speedAmp  > 0 ) pred += 0.20000000298023224 * speedAmp;
 
+        double diff = data.currentDeltaXZ - pred;
 
-        double decupleBalance = balance * 10;
+        double allowedMaxDiff = ( data.clientAirTick < 2 ? 1 : 0.1 );
 
-        int spdLevel = new PlayerDataUtil(player).getAmplifier(PotionEffectType.SPEED);
-
-        // this is because, right after the effect expired, this will cause some false flags. so i did this.
-        sinceLostSpeedLevel++;
-        if ( spdLevel != -1 ) {
-            sinceLostSpeedLevel = 0;
-            speedLevel = spdLevel;
-        }
-        // now, new speed level can set.
-        if ( sinceLostSpeedLevel >= 5 ) {
-            speedLevel = -1;
+        if ( diff > allowedMaxDiff ) {
+            flag("diff=" + diff + " > " + allowedMaxDiff + " friction=" + friction);
         }
 
-        double maxBalance = ( data.currentDeltaY == 0 ? 3.4 : 7.2 );
 
-        if ( data.currentDeltaY == 0 && data.isHittingHead ) {
-            maxBalance += 1.5;
-        }
-
-        if ( data.serverGroundTick <= 2 ) {
-            maxBalance += 0.8;
-        }
-
-        if ( speedLevel != -1 ) {
-            maxBalance += (speedLevel * 1.2);
-        }
-
-        if ( data.sinceOnStairTick < 5 ) {
-            maxBalance += 0.8;
-        }
-
-        if ( decupleBalance > maxBalance ) {
-            flag( decupleBalance + ">" + maxBalance );
-        }
-
+        lastFriction = friction;
     }
 
 }

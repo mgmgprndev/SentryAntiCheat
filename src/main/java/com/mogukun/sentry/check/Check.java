@@ -1,6 +1,7 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
+import com.mogukun.sentry.models.Configuration;
 import com.mogukun.sentry.models.MovementData;
 import com.mogukun.sentry.models.PlayerData;
 import com.mogukun.sentry.utils.FlagUtil;
@@ -15,9 +16,11 @@ public abstract class Check implements Listener, Cloneable{
 
     public CheckInfo checkInfo;
     public Player player;
+    public Configuration config;
 
     public Check(){
         checkInfo = this.getClass().getAnnotation(CheckInfo.class);
+        config = new Configuration(checkInfo.path());
     }
 
     public Check setPlayer(Player p){

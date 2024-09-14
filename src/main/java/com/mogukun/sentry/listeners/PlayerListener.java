@@ -45,7 +45,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        Sentry.instance.checkManager.checkMap.remove(event.getPlayer().getUniqueId());
+        Player player = event.getPlayer();
+        call(player, event);
+        Sentry.instance.dataManager.getPlayerData(player).lastPlace = System.currentTimeMillis();
     }
 
     @EventHandler
@@ -63,7 +65,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onAttack(EntityDamageByEntityEvent event){
         if(event.getDamager() instanceof Player) {
-            call(((Player) event.getDamager()), event);
+            Player player = ((Player) event.getDamager());
+            call(player, event);
+            Sentry.instance.dataManager.getPlayerData(player).isDigging = false;
         }
     }
 

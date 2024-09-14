@@ -42,7 +42,7 @@ public class FlyB extends Check {
 
         if ( difference > 0.001 ) {
             buffer += difference * 10;
-            if ( buffer > 10 ) {
+            if ( buffer > config.getDoubleOrDefault("flag_buffer", 10) ) {
                 flag("pred=" + predicated + " real=" + data.currentDeltaY + " diff=" + difference );
                 buffer -= 1;
             }

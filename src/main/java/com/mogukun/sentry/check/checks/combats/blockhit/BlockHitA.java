@@ -26,7 +26,7 @@ public class BlockHitA extends Check {
             PacketPlayInUseEntity packet = (PacketPlayInUseEntity) thePacket;
             if ( packet.a() == PacketPlayInUseEntity.EnumEntityUseAction.ATTACK ) {
                 if ( isBlocking ) {
-                    if ( counter.count() > 5 ) flag();
+                    if ( counter.count() > config.getIntegerOrDefault("flag_buffer", 5) ) flag();
                 }
             }
             if ( packet.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT ) {

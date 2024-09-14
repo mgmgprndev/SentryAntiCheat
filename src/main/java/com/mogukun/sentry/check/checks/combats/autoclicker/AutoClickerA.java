@@ -21,10 +21,8 @@ public class AutoClickerA extends Check {
 
 
     ConcurrentLinkedDeque<DeltaSample> samples = new ConcurrentLinkedDeque<>();
-    boolean isBreaking = false;
     long lastArm = 0;
     int buffer = 0;
-    long lastPlace = 0;
 
 
     @Override
@@ -34,8 +32,8 @@ public class AutoClickerA extends Check {
 
             long now = System.currentTimeMillis();
 
-            if ( now - lastPlace  < 5 ) return;
-            if ( isBreaking ) return;
+            if ( now - getPlayerData().lastPlace  < 5 ) return;
+            if ( getPlayerData().isDigging ) return;
 
             if ( lastArm == 0 ) {
                 lastArm = now;
@@ -88,7 +86,7 @@ public class AutoClickerA extends Check {
 
                 String debug = "deviation=" +  newStdDev + " sample-sizes: f=" + filteredSamples.size() + " o=" + sampleSize;
                 if (newStdDev < 20) {
-                    if ( buffer++ > 1 ) {
+                    if ( buffer++ > config.getIntegerOrDefault("flag_buffer", 1) ) {
                         flag(debug);
                         buffer = 0;
                     }
@@ -102,20 +100,7 @@ public class AutoClickerA extends Check {
             lastArm = now;
 
 
-        } else if ( packet instanceof PacketPlayInBlockDig ) {
-            PacketPlayInBlockDig p = (PacketPlayInBlockDig) packet;
-            if(p.c() == PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK) isBreaking = true;
-            if(p.c() == PacketPlayInBlockDig.EnumPlayerDigType.STOP_DESTROY_BLOCK) isBreaking = false;
-            if(p.c() == PacketPlayInBlockDig.EnumPlayerDigType.ABORT_DESTROY_BLOCK) isBreaking = false;
-        } else if ( packet instanceof PacketPlayInBlockPlace ) {
-            lastPlace = System.currentTimeMillis();
         }
-    }
-
-    @Override
-    public void event(Event event){
-        // this is because only this called if this event by the player. no need for check that.
-        if ( event instanceof EntityDamageByEntityEvent ) isBreaking = false;
     }
 
 }

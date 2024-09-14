@@ -78,7 +78,7 @@ public class FlyA extends Check {
         if ( suspectLevel > 0 ) {
             buffer += suspectLevel;
 
-            if ( buffer > 5 ) flag();
+            if ( buffer > config.getDoubleOrDefault("flag_buffer", 5) ) flag();
 
         }
 

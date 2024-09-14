@@ -25,7 +25,7 @@ public class SpeedB extends Check {
         float difference = (float) data.currentDeltaXZ - predicted;
 
         if ( data.serverAirTick > 1 && difference > 0.001 ) {
-            if (buffer++ > 1 ) {
+            if (buffer++ > config.getDoubleOrDefault("flag_buffer", 1) ) {
                 flag("pred=" + predicted + " real=" + data.currentDeltaXZ + " difference=" + difference);
                 buffer -= 0.5;
             }

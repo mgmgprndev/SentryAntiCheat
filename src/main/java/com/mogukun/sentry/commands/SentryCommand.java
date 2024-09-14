@@ -2,6 +2,7 @@ package com.mogukun.sentry.commands;
 
 import com.mogukun.sentry.Sentry;
 import com.mogukun.sentry.models.PlayerData;
+import com.mogukun.sentry.utils.ConfigurationUtil;
 import com.mogukun.sentry.utils.PlayerDataUtil;
 import com.mogukun.sentry.gui.guis.MainMenu;
 import com.mogukun.sentry.utils.CheckUtil;
@@ -117,6 +118,7 @@ public class SentryCommand implements CommandExecutor {
                     Sentry.instance.reloadConfig();
                     Sentry.instance.config = Sentry.instance.getConfig();
                     Sentry.instance.checkUtil = new CheckUtil();
+                    Sentry.instance.configurationUtil = new ConfigurationUtil();
                     player.sendMessage(chatColor("&a Reloaded Config!"));
                 }
                 else if ( args[0].toLowerCase().startsWith("gui") ) {

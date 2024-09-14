@@ -14,11 +14,12 @@ public class CheckUtil {
         for (Check check : Sentry.instance.checkManager.checks) {
             String originalPath = check.checkInfo.path();
             String path = "checks." + originalPath;
+            String statusPath = path + ".status";
             if ( Sentry.instance.config.get(path) == null ) {
-                Sentry.instance.config.set(path, true );
+                Sentry.instance.config.set(statusPath, true );
                 statuses.add(new CheckStatus(originalPath,true));
                 hasChanged = true;
-            } else statuses.add(new CheckStatus(originalPath, Sentry.instance.config.getBoolean(path)));
+            } else statuses.add(new CheckStatus(originalPath, Sentry.instance.config.getBoolean(statusPath)));
         }
         if ( hasChanged ) {
             Sentry.instance.saveConfig();
@@ -43,7 +44,7 @@ public class CheckUtil {
         CheckStatus s = getCheckStatus(path);
         if ( s != null ) {
             s.enabled = newStatus;
-            Sentry.instance.config.set("checks." + path, newStatus);
+            Sentry.instance.config.set("checks." + path + ".status", newStatus);
             Sentry.instance.saveConfig();
             Sentry.instance.reloadConfig();
             Sentry.instance.config = Sentry.instance.getConfig();
@@ -53,6 +54,25 @@ public class CheckUtil {
     public CheckStatus getCheckStatus(String path) {
         for ( CheckStatus s : statuses ) {
             if ( s.path == path ) return s;
+        }
+        return null;
+    }
+
+
+    public void setObject(String path, String config, Object newObj) {
+        CheckStatus s = getCheckStatus(path);
+        if ( s != null ) {
+            Sentry.instance.config.set("checks." + path + "." + config, newObj );
+            Sentry.instance.saveConfig();
+            Sentry.instance.reloadConfig();
+            Sentry.instance.config = Sentry.instance.getConfig();
+        }
+    }
+
+    public Object getObject(String path, String config) {
+        CheckStatus s = getCheckStatus(path);
+        if ( s != null ) {
+            return Sentry.instance.config.get("checks." + path + "." + config );
         }
         return null;
     }

@@ -6,6 +6,8 @@ public class PlayerData {
     public PlayerData() {}
 
     public MovementData data = null;
+    public boolean isDigging = false;
+    public long lastPlace = 0;
     public boolean runningTransactionPingCheck = false;
     public long transactionSent = 0;
     public long transactionReceived = 0;

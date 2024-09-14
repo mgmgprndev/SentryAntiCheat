@@ -26,10 +26,12 @@ public class ReachA extends Check {
 
     long ping = 0;
 
+    Location loc;
+
     @Override
     public void handle(MovementData data)
     {
-        Location playerLocation = player.getLocation().clone();
+        loc = new Location(player.getWorld(), data.currentX, data.currentY, data.currentZ, data.currentYaw, data.currentPitch);
         ping = data.ping;
 
         locationTimeStamps.removeIf(s -> System.currentTimeMillis() - s.timestamp > 1000);
@@ -37,10 +39,10 @@ public class ReachA extends Check {
         List<Entity> entities;
 
         try {
-            entities = new ArrayList<>(playerLocation.getWorld().getEntities());
+            entities = new ArrayList<>(loc.getWorld().getEntities());
             for ( Entity ent : entities ) {
                 Location  entLocation = ent.getLocation().clone();
-                double dist = entLocation.distance(playerLocation);
+                double dist = entLocation.distance(loc);
                 if ( dist < 10 ) {
                     locationTimeStamps.add(new LocationTimeStamp(ent.getUniqueId(), entLocation));
                 }
@@ -52,25 +54,28 @@ public class ReachA extends Check {
     @Override
     public void event(Event event){
         if ( event instanceof EntityDamageByEntityEvent) {
+
+            if ( loc == null ) return;
+
             long now = System.currentTimeMillis();
             UUID uid = ((EntityDamageByEntityEvent) event).getEntity().getUniqueId();
             double minimumDistance = Double.MAX_VALUE;
-
-            Location loc = player.getLocation().clone();
 
             for ( LocationTimeStamp lts : locationTimeStamps ) {
                 if ( lts.uuid != uid  ) continue;
 
                 long diff = now - ping - lts.timestamp;
-                if ( diff < 250 ) {
+                if ( diff < 500 ) {
+
                     double dist = loc.distance(lts.loc);
+
                     if ( minimumDistance > dist ) minimumDistance = dist;
                 }
             }
 
             if ( minimumDistance == Double.MAX_VALUE ) return;
 
-            if ( minimumDistance > 3.5 ) flag("distance=" + minimumDistance);
+            if ( minimumDistance > config.getDoubleOrDefault("max_distance", 3.5) ) flag("distance=" + minimumDistance);
         }
     }
 

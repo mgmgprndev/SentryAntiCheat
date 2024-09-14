@@ -7,6 +7,7 @@ import com.mogukun.sentry.gui.GUIManager;
 import com.mogukun.sentry.listeners.PlayerListener;
 import com.mogukun.sentry.managers.ServerTPS;
 import com.mogukun.sentry.utils.CheckUtil;
+import com.mogukun.sentry.utils.ConfigurationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -29,6 +30,7 @@ public final class Sentry extends JavaPlugin {
 
     public Configuration config;
     public GUIManager guiManager;
+    public ConfigurationUtil configurationUtil;
 
     @Override
     public void onEnable() {
@@ -45,9 +47,11 @@ public final class Sentry extends JavaPlugin {
         checkManager = new CheckManager();
         checkUtil = new CheckUtil();
         guiManager = new GUIManager();
+        configurationUtil = new ConfigurationUtil();
         getServer().getPluginManager().registerEvents( new PlayerListener(), this );
         getCommand("sentry").setExecutor( new SentryCommand() );
-        for ( Player p : Bukkit.getOnlinePlayers() ) Sentry.instance.checkManager.checkMap.remove(p.getUniqueId());
+        Sentry.instance.checkManager.checkMap.clear();
+        Sentry.instance.checkManager.vl.clear();
 
         System.out.println("[Sentry] Loaded Sentry AntiCheat in " + ( System.currentTimeMillis() - startLoading ) + "ms.");
     }

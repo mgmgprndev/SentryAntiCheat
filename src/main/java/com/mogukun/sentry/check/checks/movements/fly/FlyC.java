@@ -28,7 +28,7 @@ public class FlyC extends Check {
         if ( data.sinceVehicleTick <= 10 || data.sinceStandingOnBoatTick <= 10 || data.sinceWebTick <= 10 || data.sinceWaterTick <= 10 || data.sinceClimbTick <= 10 ) return;
 
         if ( data.currentY < data.lastY && data.currentDeltaY <= data.lastDeltaY ) {
-            if ( counter.count() > 5 ) {
+            if ( counter.count() > config.getDoubleOrDefault("flag_buffer", 5) ) {
                 flag();
             }
         }

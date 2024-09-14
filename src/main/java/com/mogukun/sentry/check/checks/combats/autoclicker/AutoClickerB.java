@@ -3,6 +3,7 @@ package com.mogukun.sentry.check.checks.combats.autoclicker;
 import com.mogukun.sentry.check.Category;
 import com.mogukun.sentry.check.Check;
 import com.mogukun.sentry.check.CheckInfo;
+import com.mogukun.sentry.models.Configuration;
 import com.mogukun.sentry.models.Counter;
 import com.mogukun.sentry.models.DeltaSample;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -23,13 +24,9 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 )
 public class AutoClickerB extends Check {
 
-
-    boolean isBreaking = false;
     long lastArm = 0;
-    long lastPlace = 0;
 
     ConcurrentLinkedDeque<DeltaSample> samples = new ConcurrentLinkedDeque<>();
-    int buffer = 0;
 
 
     @Override
@@ -37,54 +34,30 @@ public class AutoClickerB extends Check {
     {
         if (packet instanceof PacketPlayInArmAnimation ) {
 
-            long now = System.currentTimeMillis();
+            long now = System.nanoTime();
 
-            if ( now - lastPlace  < 5 ) return;
-            if ( isBreaking ) return;
+            if ( now - getPlayerData().lastPlace  < 5 ) return;
+            if ( getPlayerData().isDigging ) return;
 
             if ( lastArm == 0 ) {
                 lastArm = now;
                 return;
             }
 
-            samples.removeIf(s -> now - s.timeStamp > 1000);
+            samples.removeIf(s -> now - s.timeStamp > 1000000000 );
 
             long delta = now - lastArm;
             samples.add( new DeltaSample(delta) );
 
-            long average = 0;
-            long oldestTime = Long.MAX_VALUE;
-            for ( DeltaSample d : samples ) {
-                average+=d.d;
-                if ( oldestTime > d.timeStamp ){
-                    oldestTime = d.timeStamp;
-                }
+            if ( samples.size() > 10 ) {
+
+                for ( DeltaSample s : samples );
+
             }
-            average /= samples.size();
-
-            long predicatedAvg = (now - oldestTime) / samples.size();
-
-            long difference = predicatedAvg - average;
-
-            //debug("difference=" + difference + " average=" + average  + " predicated=" + predicatedAvg + " current=" + delta);
-
 
             lastArm = now;
 
-        } else if ( packet instanceof PacketPlayInBlockDig ) {
-            PacketPlayInBlockDig p = (PacketPlayInBlockDig) packet;
-            if(p.c() == PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK) isBreaking = true;
-            if(p.c() == PacketPlayInBlockDig.EnumPlayerDigType.STOP_DESTROY_BLOCK) isBreaking = false;
-            if(p.c() == PacketPlayInBlockDig.EnumPlayerDigType.ABORT_DESTROY_BLOCK) isBreaking = false;
-        } else if ( packet instanceof PacketPlayInBlockPlace ) {
-            lastPlace = System.currentTimeMillis();
         }
-    }
-
-    @Override
-    public void event(Event event){
-        // this is because only this called if this event by the player. no need for check that.
-        if ( event instanceof EntityDamageByEntityEvent ) isBreaking = false;
     }
 
 }

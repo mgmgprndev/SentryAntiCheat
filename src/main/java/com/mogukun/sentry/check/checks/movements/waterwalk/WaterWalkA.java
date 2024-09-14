@@ -26,7 +26,7 @@ public class WaterWalkA extends Check {
 
         if ( data.currentDeltaY == data.lastDeltaY ) {
             int count = counter.count();
-            if ( count > 5 ) {
+            if ( count > config.getIntegerOrDefault("flag_buffer", 5) ) {
                 flag("count=" + count );
             }
         } else {

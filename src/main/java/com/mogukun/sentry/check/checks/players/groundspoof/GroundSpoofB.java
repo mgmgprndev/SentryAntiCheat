@@ -25,7 +25,7 @@ public class GroundSpoofB extends Check {
 
         if ( data.serverGroundTick > 15 &&
                data.clientAirTick > 15 ) {
-            if (buffer++ > 5) {
+            if (buffer++ > config.getIntegerOrDefault("flag_buffer", 5)) {
                 flag("sgt=" + data.serverGroundTick + " sat=" + data.clientAirTick);
                 buffer = 0;
             }

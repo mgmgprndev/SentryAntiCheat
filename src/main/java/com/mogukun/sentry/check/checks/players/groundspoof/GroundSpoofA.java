@@ -44,7 +44,7 @@ public class GroundSpoofA extends Check {
         balance -= 1;
 
         if ( balance > 25 ) {
-            if ( buffer++ > 4 ) {
+            if ( buffer++ > config.getIntegerOrDefault("flag_buffer", 4) ) {
                 flag("balance=" + balance);
                 buffer = 0;
             }

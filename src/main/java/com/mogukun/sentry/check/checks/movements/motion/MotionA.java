@@ -23,7 +23,7 @@ public class MotionA extends Check {
         double accelXZ = Math.abs(data.currentDeltaXZ - data.lastDeltaXZ);
 
         if ( accelXZ < 5.0E-15 && ( data.currentDeltaXZ > 0 || data.lastDeltaXZ > 0  ) ) {
-            if ( buffer++ > 2 ) {
+            if ( buffer++ > config.getIntegerOrDefault("flag_buffer", 2) ) {
                 flag( "xz=" + accelXZ );
                 buffer = 0;
             }

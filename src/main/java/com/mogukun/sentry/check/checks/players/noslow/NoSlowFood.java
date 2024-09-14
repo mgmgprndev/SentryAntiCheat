@@ -34,7 +34,7 @@ public class NoSlowFood extends Check {
         }
 
         if ( isEating ) {
-            if ( counter.count() > 5 ) {
+            if ( counter.count() > config.getIntegerOrDefault("flag_buffer", 5) ) {
                 flag();
             }
         }

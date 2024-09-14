@@ -25,7 +25,7 @@ public class WallClimbA extends Check {
 
         if ( data.currentY > data.lastY ||
                 ( data.currentDeltaY == data.lastDeltaY && data.currentDeltaY > 0.5 )  ) {
-            if ( counter.count() > 12 ) {
+            if ( counter.count() > config.getIntegerOrDefault("flag_buffer", 12) ) {
                 flag("count="+counter.getCount());
             }
 

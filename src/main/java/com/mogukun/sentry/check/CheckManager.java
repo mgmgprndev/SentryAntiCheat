@@ -7,6 +7,7 @@ import com.mogukun.sentry.check.checks.combats.aura.AuraC;
 import com.mogukun.sentry.check.checks.combats.autoclicker.AutoClickerA;
 import com.mogukun.sentry.check.checks.combats.autoclicker.AutoClickerB;
 import com.mogukun.sentry.check.checks.combats.blockhit.BlockHitA;
+import com.mogukun.sentry.check.checks.combats.reach.ReachA;
 import com.mogukun.sentry.check.checks.movements.fly.*;
 import com.mogukun.sentry.check.checks.movements.motion.MotionA;
 import com.mogukun.sentry.check.checks.movements.speed.*;
@@ -50,6 +51,8 @@ public class CheckManager {
 
         checks.add( new AutoClickerA() );
         checks.add( new AutoClickerB() );
+
+        checks.add( new ReachA() );
 
         checks.add( new FlyA() );
         checks.add( new FlyB() );
@@ -116,7 +119,20 @@ public class CheckManager {
                 Sentry.instance.dataManager.getPlayerData(player).lastInKeepAlive = System.currentTimeMillis();
                 Sentry.instance.dataManager.getPlayerData(player).ping =
                         Sentry.instance.dataManager.getPlayerData(player).lastInKeepAlive - Sentry.instance.dataManager.getPlayerData(player).lastOutKeepAlive;
-
+            }
+            if ( packet instanceof PacketPlayInBlockDig ) {
+                PacketPlayInBlockDig p = (PacketPlayInBlockDig) packet;
+                boolean isDigging = p.c() == PacketPlayInBlockDig.EnumPlayerDigType.START_DESTROY_BLOCK;
+                if (isDigging ||
+                        p.c() == PacketPlayInBlockDig.EnumPlayerDigType.STOP_DESTROY_BLOCK ||
+                        p.c() == PacketPlayInBlockDig.EnumPlayerDigType.ABORT_DESTROY_BLOCK ) {
+                    Sentry.instance.dataManager.getPlayerData(player).isDigging = isDigging;
+                }
+            }
+            if ( packet instanceof PacketPlayInUseEntity ) {
+                if ( ((PacketPlayInUseEntity) packet).a() == PacketPlayInUseEntity.EnumEntityUseAction.ATTACK ) {
+                    Sentry.instance.dataManager.getPlayerData(player).isDigging = false;
+                }
             }
 
             MovementData data = null;

@@ -47,7 +47,7 @@ public class PingSpoofA extends Check {
         if ( closestKeepalive == null || closestTransaction == null ) return;
 
         long difference = Math.abs( closestKeepalive - closestTransaction );
-        if ( difference > 500 ) {
+        if ( difference > config.getIntegerOrDefault("max_difference", 500) ) {
             flag("difference=" + difference );
         }
 

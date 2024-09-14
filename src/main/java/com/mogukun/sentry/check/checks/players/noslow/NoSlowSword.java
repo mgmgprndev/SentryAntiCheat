@@ -57,7 +57,7 @@ public class NoSlowSword extends Check {
             }
 
             if ( isSprinting && isBlocking ) {
-                if ( counter.count() > 5 ) flag();
+                if ( counter.count() > config.getIntegerOrDefault("flag_buffer", 5) ) flag();
             }
         }
 

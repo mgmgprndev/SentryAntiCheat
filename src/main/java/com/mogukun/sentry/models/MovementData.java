@@ -66,6 +66,8 @@ public class MovementData {
 
     public long ping = 0;
 
+    public int movingTick = 0, rotatingTick = 0, sinceMovingTick = 0, sinceRotatingTick = 0;
+
     public MovementData() {}
 
     public MovementData(Player player,
@@ -165,6 +167,21 @@ public class MovementData {
         this.moving = moving;
         this.rotating = rotating;
 
+        if ( moving ) {
+            movingTick = lastMovementData.movingTick + 1;
+            sinceMovingTick = 0;
+        } else {
+            movingTick = 0;
+            sinceMovingTick = lastMovementData.sinceMovingTick + 1;
+        }
+
+        if ( rotating ) {
+            rotatingTick = lastMovementData.rotatingTick + 1;
+            sinceRotatingTick = 0;
+        } else {
+            rotatingTick = 0;
+            sinceRotatingTick = lastMovementData.sinceRotatingTick + 1;
+        }
 
 
         currentX = x;

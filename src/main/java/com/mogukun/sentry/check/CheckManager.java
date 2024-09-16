@@ -1,6 +1,7 @@
 package com.mogukun.sentry.check;
 
 import com.mogukun.sentry.Sentry;
+import com.mogukun.sentry.check.checks.combats.aura.AuraD;
 import com.mogukun.sentry.check.checks.combats.aura.AuraA;
 import com.mogukun.sentry.check.checks.combats.aura.AuraB;
 import com.mogukun.sentry.check.checks.combats.aura.AuraC;
@@ -43,20 +44,23 @@ public class CheckManager {
 
     public CheckManager(){
 
+
         checks.add( new AuraA() );
         checks.add( new AuraB() );
         checks.add( new AuraC() );
+        checks.add( new AuraD() );
 
         checks.add( new BlockHitA() );
 
         checks.add( new AutoClickerA() );
-        checks.add( new AutoClickerB() );
+        //checks.add( new AutoClickerB() );
 
         checks.add( new ReachA() );
 
         checks.add( new FlyA() );
         checks.add( new FlyB() );
         checks.add( new FlyC() );
+        checks.add( new FlyD() );
 
         checks.add( new SpeedA() );
         checks.add( new SpeedB() );

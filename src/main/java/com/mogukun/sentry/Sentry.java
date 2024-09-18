@@ -1,6 +1,8 @@
 package com.mogukun.sentry;
 
 import com.mogukun.sentry.check.CheckManager;
+import com.mogukun.sentry.check.Plan;
+import com.mogukun.sentry.listeners.MessageListener;
 import com.mogukun.sentry.managers.PlayerDataManager;
 import com.mogukun.sentry.commands.SentryCommand;
 import com.mogukun.sentry.gui.GUIManager;
@@ -29,6 +31,7 @@ public final class Sentry extends JavaPlugin {
     public HashMap<UUID,Integer> alertStatus = new HashMap<>();
 
     public Configuration config;
+    public Plan plan = Plan.Free;
     public GUIManager guiManager;
     public ConfigurationUtil configurationUtil;
 
@@ -38,7 +41,6 @@ public final class Sentry extends JavaPlugin {
         long startLoading = System.currentTimeMillis();
 
         System.out.println("[Sentry] Loading Sentry AntiCheat");
-
         this.instance = this;
         saveDefaultConfig();
         config = getConfig();
@@ -52,6 +54,7 @@ public final class Sentry extends JavaPlugin {
         getCommand("sentry").setExecutor( new SentryCommand() );
         Sentry.instance.checkManager.checkMap.clear();
         Sentry.instance.checkManager.vl.clear();
+        Bukkit.getMessenger().registerIncomingPluginChannel(this,"mc|brand", new MessageListener());
 
         System.out.println("[Sentry] Loaded Sentry AntiCheat in " + ( System.currentTimeMillis() - startLoading ) + "ms.");
     }

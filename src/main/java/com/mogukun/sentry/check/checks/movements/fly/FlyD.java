@@ -72,7 +72,7 @@ public class FlyD extends Check {
             } else bufferCounter.count(-150);
 
             double bufferCount =  bufferCounter.getCount();
-            if ( bufferCount > 0 ) {
+            if ( bufferCount > config.getDoubleOrDefault("flag_buffer", 500) ) {
                 flag("buffer1=" + bufferCount + " buffer2=" + totalBuffer + " sampleSize=" + samples.size() );
             }
         }

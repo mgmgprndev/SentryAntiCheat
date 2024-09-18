@@ -6,6 +6,7 @@ public class PlayerData {
     public PlayerData() {}
 
     public MovementData data = null;
+    public String clientBrand = "";
     public boolean isDigging = false;
     public long lastPlace = 0;
     public boolean runningTransactionPingCheck = false;

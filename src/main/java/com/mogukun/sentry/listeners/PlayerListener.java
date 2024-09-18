@@ -35,6 +35,8 @@ public class PlayerListener implements Listener {
                                 new PacketHandler(event.getPlayer()))
         );
 
+
+
         call(event.getPlayer(), event);
     }
 

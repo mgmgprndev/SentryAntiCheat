@@ -13,5 +13,6 @@ public @interface CheckInfo {
     String description();
     Category category();
     boolean experimental() default false;
+    Plan plan() default Plan.Free;
 
 }

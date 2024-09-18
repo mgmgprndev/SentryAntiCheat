@@ -29,7 +29,8 @@ public class FlyA extends Check {
                 data.sinceStandingOnBoatTick <= 10 ||
                 data.sinceWebTick <= 10 ||
                 data.sinceWaterTick <= 10 ||
-                data.sinceClimbTick <= 10 ) return;
+                data.sinceClimbTick <= 10 ||
+                data.sinceSlimeTick <= 20) return;
         if ( data.serverAirTick < 1 ) {
             buffer = 0;
             return;

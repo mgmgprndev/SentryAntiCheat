@@ -6,7 +6,6 @@ import com.mogukun.sentry.check.checks.combats.aura.AuraA;
 import com.mogukun.sentry.check.checks.combats.aura.AuraB;
 import com.mogukun.sentry.check.checks.combats.aura.AuraC;
 import com.mogukun.sentry.check.checks.combats.autoclicker.AutoClickerA;
-import com.mogukun.sentry.check.checks.combats.autoclicker.AutoClickerB;
 import com.mogukun.sentry.check.checks.combats.blockhit.BlockHitA;
 import com.mogukun.sentry.check.checks.combats.reach.ReachA;
 import com.mogukun.sentry.check.checks.movements.fly.*;
@@ -23,6 +22,7 @@ import com.mogukun.sentry.check.checks.players.noslow.NoSlowFood;
 import com.mogukun.sentry.check.checks.players.noslow.NoSlowSword;
 import com.mogukun.sentry.check.checks.players.pingspoof.PingSpoofA;
 import com.mogukun.sentry.check.checks.players.timer.TimerA;
+import com.mogukun.sentry.check.checks.players.timer.TimerB;
 import com.mogukun.sentry.models.MovementData;
 import com.mogukun.sentry.models.ViolationData;
 import com.mogukun.sentry.utils.PlayerDataUtil;
@@ -78,6 +78,7 @@ public class CheckManager {
         checks.add( new GroundSpoofC() );
 
         checks.add( new TimerA() );
+        checks.add( new TimerB() );
 
         checks.add( new BadPacketA() );
         checks.add( new BadPacketB() );

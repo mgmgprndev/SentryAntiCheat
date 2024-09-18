@@ -39,10 +39,11 @@ public class MainMenu extends GUI {
 
         inv.setItem(13, createStack(Material.PAPER, "&6Sentry Information", new ListUtil().
                 add("&1").
+                add("&6Type &f" + Sentry.instance.plan).
+                add("&6Version &f" + Sentry.instance.getDescription().getVersion()).
                 add("&6Author &f" + (authors.size() > 1 ? String.join(", ", authors) : authors.get(0)) ).
                 add("&6Description").
-                add("&f" + Sentry.instance.getDescription().getDescription() ).
-                add("&6Version &f" + Sentry.instance.getDescription().getVersion())
+                add("&f" + Sentry.instance.getDescription().getDescription() )
                 .getList()));
 
 

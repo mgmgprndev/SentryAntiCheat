@@ -33,7 +33,12 @@ public class FlyB extends Check {
             buffer = 0;
             return;
         }
-        if ( data.sinceVehicleTick <= 10 || data.sinceStandingOnBoatTick <= 10 || data.sinceWebTick <= 10 || data.sinceWaterTick <= 10 || data.sinceClimbTick <= 10 ) return;
+        if ( data.sinceVehicleTick <= 10 ||
+                data.sinceStandingOnBoatTick <= 10 ||
+                data.sinceWebTick <= 10 ||
+                data.sinceWaterTick <= 10 ||
+                data.sinceClimbTick <= 10 ||
+                data.sinceSlimeTick <= 20) return;
         if ( data.sinceVelocityTaken < 5 ) return;
 
         // Credit: CheatGuard @DerRedstoner

@@ -1,10 +1,7 @@
 package com.mogukun.sentry.listeners;
 
 import com.mogukun.sentry.Sentry;
-import io.netty.channel.ChannelPipeline;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.NetworkManager;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import com.mogukun.sentry.utils.PlayerPacketUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -15,28 +12,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
-
-import java.util.concurrent.Executors;
 
 public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-
-        CraftPlayer craftPlayer = (CraftPlayer) event.getPlayer();
-        EntityPlayer entityPlayer = craftPlayer.getHandle();
-        NetworkManager networkManager = entityPlayer.playerConnection.networkManager;
-        ChannelPipeline pipeline = networkManager.channel.pipeline();
-
-        Executors.newSingleThreadExecutor().execute(()->
-                        pipeline.addBefore("packet_handler", "sentry_packet_handler",
-                                new PacketHandler(event.getPlayer()))
-        );
-
-
-
+        Sentry.instance.playerPacketUtil.addPlayer(event.getPlayer());
         call(event.getPlayer(), event);
     }
 

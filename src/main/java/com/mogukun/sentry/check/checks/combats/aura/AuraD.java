@@ -30,7 +30,7 @@ public class AuraD extends Check {
             return;
         }
 
-        if ( (System.currentTimeMillis() - lastAttack) > 500 ) {
+        if ( (System.currentTimeMillis() - lastAttack) > 500 || lastAttack == Long.MAX_VALUE ) {
             return;
         }
 

@@ -1,100 +1,70 @@
 package com.mogukun.sentry.check.checks.players.timer;
-
-import com.mogukun.sentry.Sentry;
-import com.mogukun.sentry.check.Category;
-import com.mogukun.sentry.check.Check;
-import com.mogukun.sentry.check.CheckInfo;
-import com.mogukun.sentry.models.DeltaSample;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayInFlying;
+import com.mogukun.sentry.check.*;
+import com.mogukun.sentry.models.*;
+import com.mogukun.sentry.models.Counter;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 @CheckInfo(
         name = "Timer (A)",
         path = "player.timer.a",
-        description = "Collecting Delay Timer Check",
+        description = "Stable Timer Check, Flawless Design",
         category = Category.PLAYER
 )
 public class TimerA extends Check {
 
     long lastPacket = 0;
     long startIgnore = 0;
+    double lastPercentage = 0;
 
-    ConcurrentLinkedDeque<DeltaSample> clientDeltaSample = new ConcurrentLinkedDeque<>();
-    ConcurrentLinkedDeque<DeltaSample> serverDeltaSample = new ConcurrentLinkedDeque<>();
-
-
-    long balance = 0;
-
+    BetterCounter deltaCounter = new BetterCounter(1000 * 60);
+    BetterCounter percentageCounter = new BetterCounter(1000 * 60);
+    Counter buffer = new Counter();
 
     @Override
     public void handle(Packet packet) {
         if ( packet instanceof PacketPlayInFlying )
         {
-            long now = System.currentTimeMillis();
+            long now = System.nanoTime();
 
-            if ( lastPacket == 0 ) {
+            if ( lastPacket == 0 ||
+                    getPlayerData().teleportTick <= 5 ||
+                    getPlayerData().respawnTick <= 5 ||
+                    System.currentTimeMillis() - startIgnore < 10000 ) {
+
                 lastPacket = now;
                 return;
             }
+            deltaCounter.count( now - lastPacket );
 
-            if ( getPlayerData().teleportTick <= 5 || getPlayerData().respawnTick <= 5 ) {
-                lastPacket = now;
-                return;
+            if ( deltaCounter.size() > 60 ) {
+                long avg = deltaCounter.averageLong(); //averageWithoutOutliers(deltaCounter.getLongList());
+
+                // somehow this is weird. this return 50% if player is 50% faster.
+                double tickDelay = 50000000; //1000000000 / Sentry.instance.tps.tps; (IDK)
+                double percentage = ((double)avg / tickDelay) * 100;
+                percentage -= 100; // so get difference.
+                percentage = 100 - percentage;
+
+                percentageCounter.count(percentage);
+                percentage = percentageCounter.averageDouble();
+
+                if ( percentageCounter.size() > 60 ) {
+                    if( percentage > 102 || percentage < 98 ) {
+                        int bufferCount = buffer.count();
+                        if ( bufferCount > 10 ) {
+                            flag("percentage=" + percentage + " buffer=" + bufferCount + " size=" + deltaCounter.size() );
+                            deltaCounter.clear();
+                            percentageCounter.clear();
+                        }
+                    }
+                }
+
+
+                lastPercentage = percentage;
             }
 
-            int tps = (int) Sentry.instance.tps.getTps();
-
-            long clientDelta = now - lastPacket;
-
-            long serverDelta = (1000 / tps);
-
-            clientDeltaSample.add( new DeltaSample(clientDelta) );
-            serverDeltaSample.add( new DeltaSample(serverDelta) );
-
-            if ( clientDeltaSample.size() > 100 || serverDeltaSample.size() > 100 ) {
-
-
-                ArrayList<Long> clientTemp = new ArrayList<>();
-                ArrayList<Long> serverTemp = new ArrayList<>();
-
-                for ( DeltaSample d : clientDeltaSample ) {
-                    if ( now - d.timeStamp > 8000 ) {
-                        clientDeltaSample.remove(d);
-                        continue;
-                    }
-                    clientTemp.add(d.d);
-                }
-                for ( DeltaSample d : serverDeltaSample ) {
-                    if ( now - d.timeStamp > 8000 ) {
-                        serverDeltaSample.remove(d);
-                        continue;
-                    }
-                    serverTemp.add(d.d);
-                }
-
-                long clientAverage = averageWithoutOutliers(clientTemp);
-                long serverAverage = averageWithoutOutliers(serverTemp);
-                long diffOfAverage = Math.abs(clientAverage - serverAverage);
-
-                balance += diffOfAverage;
-                balance -= balance > 0 && diffOfAverage != 0 ? 1 : 0;
-
-                long d = Math.abs(Math.abs(clientAverage - 50) - Math.abs(serverAverage - 50));
-
-                if ( balance > 50 && d > 1 ) {
-                    flag("balance=" + balance + " ca=" + clientAverage + " sa=" + serverAverage + " diff=" + diffOfAverage + " diff2=" + d);
-                    balance = 0;
-                    clientDeltaSample.clear();
-                    serverDeltaSample.clear();
-                }
-            }
 
             lastPacket = now;
         }
@@ -102,39 +72,9 @@ public class TimerA extends Check {
 
     @Override
     public void event(Event event) {
-        if ( event instanceof PlayerTeleportEvent ) {
-            clientDeltaSample.add( new DeltaSample(-50) );
-        }
         if ( event instanceof PlayerJoinEvent) {
             startIgnore = System.currentTimeMillis();
         }
-    }
-
-
-    public long averageWithoutOutliers(ArrayList<Long> list) {
-        Collections.sort(list);
-        int size = list.size();
-        long q1 = list.get(size / 4);
-        long q3 = list.get(3 * size / 4);
-        double iqr = q3 - q1;
-        double lowerBound = q1 - 1.5 * iqr;
-        double upperBound = q3 + 1.5 * iqr;
-        ArrayList<Long> filteredList = new ArrayList<>();
-        for (long num : list) {
-            if (num >= lowerBound && num <= upperBound) {
-                filteredList.add(num);
-            }
-        }
-        if (filteredList.isEmpty()) {
-            return 50;
-        }
-
-        long sum = 0;
-        for (long num : filteredList) {
-            sum += num;
-        }
-
-        return sum / filteredList.size();
     }
 
 }

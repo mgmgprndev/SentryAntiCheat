@@ -3,6 +3,9 @@ SentryAntiCheat is open-source  packet based anti-cheat solution for Minecraft 1
 Detects Fly, Speed, WaterWalk, NoFall, Timer etc... (:
 And Free........ HaHa!
 
+# Donation
+here: https://mc-host24.de/donate/mogukun
+
 # Issues
 currently not found
 
